@@ -1,0 +1,12 @@
+<ul>
+  <%# if false %>
+    <% authors.each do |a|%>
+    <li>
+      <%= a.name %> <%= a.country.country %>
+        <% a.books.each do |b| %>
+          <%= b.title %>
+        <% end %>
+      <% end %>
+    </li>
+  <%# end %>
+</ul>

@@ -1,0 +1,25 @@
+<ol>
+    <% books.each do |book| %>
+      <!-- then display only books with reviews-->
+        <% if book.reviews.any? %> 
+            <li>
+                <strong><%= book.title %></strong> [ <em><%= book.genre.name %></em> ] 
+                by <%= book.author.name %> <%= book.author.country.country %>
+                <ul>
+                    <h3> Users reviews </h3>
+                    <% book.reviews.each do |review| %>
+                        <li>  
+                            <%= review.user.name %> wrote: "<%=   review.comment %>""
+                            <% (1..5).to_a.sample.times do  %>
+                                <i class="fa fa-star" ></i>
+                            <% end %>
+                        </li>
+                    <% end %>
+                    <br>
+                </ul> 
+            </li>
+        <% end %>
+    <% end %>
+</ol>
+
+<!-- https://medium.com/@toodimes/how-to-implement-a-simple-5-star-rating-system-in-rails-using-native-bootstrap-48d5be205fdc> -->

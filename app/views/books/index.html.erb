@@ -1,0 +1,52 @@
+<div>
+  <h1>Book catalogue by author</h1>
+  <%= render 'books/catalogue', authors: @authors %>
+</div>
+
+<p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
+ We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
+<div>
+  <h1>Uncommented books: using a scope and finding nil column on associated table</h1>
+  <%= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
+   
+   <h1>Commented books: using a scope and simply joins</h1>
+   <%= render 'books/reviewed_unreviewed', books: @reviewed_books %>
+</div>
+
+<div>
+  <h1>Reviews by book <i class="fa fa-star"></i></h1>
+  <h2>Reviews for a book: form in this Single Page</h2>
+
+  <!-- https://medium.com/le-wagon/build-a-simple-search-with-the-simple-form-gem-in-rails-5-b247168282d1> -->
+  <!-- std is POST so GET is specified. By defining a symbol, we can get a key in the params. If we had -->
+  <!-- declared @search, Rails says it is not defined -->
+  <!-- the url:'root_path' for std HTML render tells on which page the results will be displayed. Here, on the SPA -->
+    
+    <%= simple_form_for :search, url: root_path, method: "GET" do |f| %>   
+      <%= f.input_field :name, collection: @titles %>
+      <%= f.submit "Search" %>
+    <% end %>
+  
+  <div id="ajax_review_by_title">
+    <% unless @get_title == nil %>
+      <%= render 'books/reviews_by_title', get_title: @get_title, reviews_title: @greviews_title %>
+    <% end %>
+  </div>
+  
+  <h2>Reviews of all books</h2>
+  <%= render 'books/reviews_all', books: @books %>  
+</div>
+
+
+
+<div>
+  <h1>Commented books by user:'Ilene': using a scope with variable and simply joins</h1>
+   <p>TODO: form with 'Ilene' as input</p>
+   <br>
+   <%= render 'books/reviews_by_user', get_reviews_by_user: @get_reviews_by_user %>
+
+   <h1>All comments by users: usage of "reviewable"</h1>
+   <%= render 'books/users_reviews', users: @users %>
+</div>
+
+

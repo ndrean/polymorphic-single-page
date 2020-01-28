@@ -1,0 +1,6 @@
+<h3>The reviews for <%= get_title %> are:</h3>
+<ul>
+    <% reviews_title.reviews.each do |r| %>
+        <li><%= r.comment %></li>
+    <% end %>
+</ul>
