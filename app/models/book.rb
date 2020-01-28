@@ -18,7 +18,7 @@ class Book < ApplicationRecord
   # joins will include the table reviews, so only when a review exists
   scope :reviewed, -> {joins(:reviews).distinct }
 
-  scope :get_by_title, ->(title) {self.where("title ILIKE ?", "%#{title}%").first}
+  scope :find_by_title, ->(title) {self.where("title ILIKE ?", "%#{title}%").first}
 
   scope :titles, -> { self.pluck(:title)}
 end

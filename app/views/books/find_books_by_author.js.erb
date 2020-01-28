@@ -1,0 +1,8 @@
+function insertBooksByAuthor() {
+  const divBooksByAuthor = document.getElementById('ajax_books_by_author');
+  divBooksByAuthor.innerHTML = "";
+  divRBooksByAuthor.insertAdjacentHTML('beforeend',
+   '<%= j render "books/catalogue", author: @author %>')
+};
+
+insertBooksByAuthor();

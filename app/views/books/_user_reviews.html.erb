@@ -1,0 +1,16 @@
+<h3><%= user_name %>: </h3>
+<ul>
+    <% user_reviews.each do |review|%>
+        <% if review.reviewable_type == 'Book' %>
+            <li>
+            "<%= review.comment %>" about the book "<%= review.reviewable.title %>" 
+            by <%= review.reviewable.author.name %> <%= review.reviewable.author.country.country %>
+            </li>
+            <% else %>
+            <li>
+            "<%= review.comment %>" on the writter 
+            <%= review.reviewable.name %> <%#= review.reviewable.country.country %>
+            </li>
+        <% end %>
+    <% end %>
+</ul>
