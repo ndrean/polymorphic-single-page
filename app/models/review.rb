@@ -8,5 +8,5 @@ class Review < ApplicationRecord
 
   scope :not_reviewed, -> {where(comment: nil)}
 
-  #scope :get_reviews, -> {joins(:reviews)}
+  scope :get_reviews, -> {joins(:reviews)} #?
 end
