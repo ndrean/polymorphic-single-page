@@ -14,20 +14,20 @@ class BooksController < ApplicationController
 
     # precharging for the form
     @titles = Book.titles # from model
-    # precharging for the form
-    @names = Author.pluck(:name)
+    
+    
 
     #@get_reviews_by_user = Book.joins(:users).reviewed_by('Eddy')
   end
 
   def get_reviews_by_title
-    #@titles = Book.titles ?
     query = params[:search]
     @title = params[:search][:input_title]
-    if query.present? && !@title.nil?
+    if query.present? && !@title.empty?
+      binding.pry
       selected_book = Book.find_by_title(@title)
       @reviews_title = selected_book.reviews  
-    elsif search.present? && @title.nil?
+    elsif search.present? && @title.empty?
       @reviews_title = Review.all 
     end
     respond_to do |format|
@@ -36,24 +36,19 @@ class BooksController < ApplicationController
   end
 
   def get_books_by_author
-    query = params[:search]
-    name = params[:search][:input_name]
-    if query.present? && !name.nil?
-      @author = Author.find_by(name: input_name)
-    elsif query.present? && name.nil?
-      @author = Author.all
+    if params[:search].present? && !params[:search][:input_name].empty?
+      author_name = params[:search][:input_name]
+      @author = Author.find_by(name: author_name)
     end
     respond_to do |format|
       format.js
     end
-    
   end
 
   def get_reviews_by_user
-    search = params[:search]
-    if search.present? && !search[:user_name].nil?
-      @user_name = params[:search][:user_name]
-      @user_reviews = User.find_by(name: @user_name).reviews
+    @user_name = params[:search][:user_name]
+    if params[:search].present? && !@user_name.empty?
+      @user_reviews = User.includes(reviews: [:reviewable => {author: :country}]).find_by(name: @user_name).reviews
     end
     respond_to do |format|
       format.js

@@ -11,6 +11,9 @@
   <%= render 'books/reviewed_unreviewed', books: @reviewed_books %>
 </div>
 
+<h3>General list</h3>
+<%= render 'books/catalog', authors: @authors %>
+
 <!-- https://medium.com/le-wagon/build-a-simple-search-with-the-simple-form-gem-in-rails-5-b247168282d1> -->
 <!-- standard method is POST so GET is specified here. -->
 <!-- By using a symbol instead of an object, we can get a key in the params. Here  ':book_title' -->
@@ -22,7 +25,7 @@
 <!-- we set collection here as we want the inputs to be controlled -->
 <h3>Search for the reviews of selected books by their title</h3>
 <%= simple_form_for :search, url: get_reviews_by_title_path, remote: true, method: "GET" do |f| %>   
-  <%= f.input_field :input_title, collection: @titles %>
+  <%= f.input_field :input_title, collection: @titles, multiple: true %>
   <%= f.submit "Search" %>
 <% end %>
   
@@ -30,37 +33,16 @@
 </div>
 
 
-<div>
-  <h3>Display all the reviews with details</h3>
-  <% if @title == nil %>
-    <%#= render 'books/reviews_all', books: @books %>
-  <% end %>
-</div>
-<div>
-  <h1>Book catalogue by author</h1>
-  <%# if  false %>
+  <h3>Book catalogue by author</h3>
   <%= simple_form_for :search, url: get_books_by_author_path, remote: true, method: "GET" do |f| %>   
-      <%= f.input_field :input_name, collection: @list_authors %>
+      <%= f.input_field :input_name, collection: @list_authors, multiple: true %>
       <%= f.submit "Search" %>
   <% end %>
-  <%# end %>
   
-  <div id="ajax_books_by_authors">
-  <% if false %>
-    <% if @name == nil %>
-      <%= render 'books/catalogue', authors: @authors %>
-    <% else %>
-      <%= render 'books/reviews_by_title', title: @title, reviews_title: @reviews_title %>
-    <% end %>
-    <% end %>
-  </div>
-</div>
+  <div id="ajax_books_by_author"> </div>
 
 
-
-
-<!-- xxxxxxxxxxxxxxxxxxx -->
-<h1>Comments made by the users: (usage of "reviewable")</h1>
+<h3>Comments made by the users: (usage of "reviewable")</h3>
 <%# if  false %>
 <%= simple_form_for :search, url: get_reviews_by_user_path, remote: true, method: "GET" do |f| %>   
     <%= f.input_field :user_name, collection: @users_names %>
@@ -70,7 +52,7 @@
 
 <div id="ajax_reviews_by_user">
   <% if @name == nil %>
-    <h1>All comments by users: usage of "reviewable"</h1>
+    <h3>All comments by users: usage of "reviewable"</h3>
     <%= render 'books/users_reviews', users: @users %>
   <% end %>
 </div>

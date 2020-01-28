@@ -1,0 +1,6 @@
+<ul>
+  <%= author.name %> <%= author.country.country %> 
+  <% author.books.each do |b| %>
+    <li> <%= b.title %> </li>
+  <% end %>
+</ul>
