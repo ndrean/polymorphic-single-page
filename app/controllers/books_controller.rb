@@ -10,7 +10,7 @@ class BooksController < ApplicationController
         @unreviewed_books = Book.unreviewed
         @reviewed_books = Book.reviewed
 
-        @get_reviews_by_user = Book.joins(:users).reviewed_by('Ilene')
+        @get_reviews_by_user = Book.joins(:users).reviewed_by('Eddy')
 
         #@get_reviews_by_title = Book.get_reviews("The Last Enemy")
   end
@@ -18,3 +18,4 @@ class BooksController < ApplicationController
   def get_reviews_by_title
   end
 end
+B
