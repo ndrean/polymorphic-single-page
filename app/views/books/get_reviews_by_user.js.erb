@@ -2,7 +2,7 @@ function insertReviewsByUser() {
   const divReviewsByUser = document.getElementById('ajax_reviews_by_user');
   divReviewsByUser.innerHTML = "";
   divReviewsByUser.insertAdjacentHTML('beforeend',
-   '<%= j render "books/user_reviews", user_name: @user_name, user_reviews: @user_reviews %>')
+   '<%= j render "books/user_reviews", user_reviews: @user_reviews %>')
 };
 
 insertReviewsByUser();

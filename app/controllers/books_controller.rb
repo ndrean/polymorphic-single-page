@@ -58,10 +58,11 @@ class BooksController < ApplicationController
 
   def get_reviews_by_user
 
-    @user_name = params[:search][:user_name]
-    if params[:search].present? && !@user_name.empty?
+    user_names = params[:search][:user_name]
+    if params[:search].present? && !user_names.empty?
+      user_names = user_names[1..-1]
       @user_reviews = []
-      @user_name[1..-1].each do |u|
+      user_names.each do |u|
         @user_reviews += User.includes( reviews: [ reviewable: [{ author: :country }, :country ]])
           .find_by(name: u).reviews
       end
@@ -73,6 +74,28 @@ class BooksController < ApplicationController
 
   end
   
+# if we make the HTTP request 'url = .../books/reviews_all' (or an alias depending upon root),
+ # this will trigger the action 'reviews_all' in the controller 'books', since this association
+  # is declared in 'routes.rb'
+
+  def reviews_all
+    @books = Book.includes({reviews: :user}, {author: :country}, :genre ).all
+    
+    # => this will 'lazy' render 'books/reviews_all.html.erb' with this view using @books 
+
+    # if we declare a partial 'books/_reviews_all.html.erb', se can use it with:
+    #render partial: 'books/reviews_all', locals: {books: Book.all} 
+    #and this partial uses locally the variable 'books'
+
+  end
+
+  def reviews_all_ajax
+    @books = Book.includes({reviews: :user}, {author: :country}, :genre ).all
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
   # def search_params
   #   params.require(:search).permit(:name)

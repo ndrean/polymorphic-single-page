@@ -1,15 +1,18 @@
-<ul>
-    <% user_reviews.each do |review|%>
-        <% if review.reviewable_type == 'Book' %>
+  
+  <% user_reviews.each do |review|%>
+    <%= review.user.name %> wrote ":
+    <ul>
+        <% if review.reviewable_type == 'Book' %>  
             <li>
-                <%= review.user.name %> wrote "<%= review.comment %>" about the book "<%= review.reviewable.title %>" 
+                <%= review.comment %>" about the book "<%= review.reviewable.title %>" 
                 by <%= review.reviewable.author.name %> <%= review.reviewable.author.country.country %>
             </li>
         <% else %>
             <li>
-                <%= review.user.name %> wrote "<%= review.comment %>" on the writter 
+                <%= review.comment %>" on the writter 
                 <%= review.reviewable.name %> <%= review.reviewable.country.country %>
-            </li>
+            </li><
         <% end %>
-    <% end %>
-</ul>
+    </ul>
+<% end %>
+

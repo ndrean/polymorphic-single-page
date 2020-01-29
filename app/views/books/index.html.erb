@@ -1,5 +1,53 @@
 <h1>Polymorphism, Ajax and Single Page</h1>
 
+<%#= simple_form_for :search, url: new_path, method: "GET" do |f| %>   
+  <%#= f.input_field :input %>
+  <%#= f.submit "Search", class:"btn btn-primary"%>
+<% #end %>
+
+<h3>3 rendering methods:  partials within a page, link_to another page, AJAX display via a link</h3>
+<%#= render partial: 'books/reviews_all',  locals: {books: @books}  %>
+<a href="#search"> Go to the Ajax search section </a>
+<div class="container"><div class="row">
+
+<div class="col">
+  <p>The HTTP request 'url = ../books/index' displays the file '../views/index.html.erb' and the needed data is served by the
+  controller/method  'books#index'. This column contains a 'render' declaration to display the partial 'views/_reviews_all.html.erb'. The data is furnished by the method 'books#index'
+  so this column is loaded-displayed every time the index page is  loaded. When clicking on the 'return'
+   link, this reloads the whole page. Since the stars bellow are randomly set, they will change at each reload.
+   The button bellow just toggles the CSS class display:block/none</p>
+
+  <button class="btn btn-primary" id="hideBtn"> Hide / Show bellow </button>
+  <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
+  <div id="hideMe">
+    <%= render 'books/reviews_all', books: @books %></div>
+  </div>
+
+<div class="col">
+  <p> The link bellow makes a HTTP request 'url= ../books/reviews_all' to display the file  '../views/reviews_all',
+  which in served by the method 'books#reviews_all' for the data.
+  The same info is displayd, but through the copy of the
+  partial without the _underscore, ie 'books/reviews_all.html.erb'. This time, the data is furnished by the method
+  books#reviews_all' which 'lazy' renders '../books/reviews_all.html' with Rails naming association convention.
+  </p>
+  <p><%= link_to 'All reviews in another page', reviews_all_path %> </p>
+</div>
+
+<div class="col">
+  <p>AJAX rendering on same page. The link bellow triggers the method 'books#reviews_all_ajax'
+  which will call the Javascript file '../views/reviews_all_ajax.js.erb', which will display
+  the same partial 'views/_reviews_all.html.erb'. This method also furnishes the data. The display location needs to given and 
+  is identified by setting and id to a div. . There is no page reload this time because the stars
+  in the first column won't change (random). When clicking 'All reviews', the stars within this column
+  will change but not the first column. When clcking 'return', this will reload the page, 
+  so the stars in the first column will change and te data bellow too, since this returns to the initial state.</p>
+  <p><%= link_to 'All reviews', reviews_all_ajax_path, remote: true %></p>
+
+  <div id = "Ajax review all"></div>  
+</div>
+</div>
+</div>      
+
 
 <p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
  We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
@@ -8,10 +56,11 @@
   <%#= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
    
   <h3>Commented books: using a scope and simply joins</h3>
+<%= link_to 'Comment books', root_path %>
   <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
 </div>
 
-<h3>Search forms are AJAX rendered</h3>
+
 <%#= render 'books/catalog', authors: @authors %>
 
 <!-- https://medium.com/le-wagon/build-a-simple-search-with-the-simple-form-gem-in-rails-5-b247168282d1> -->
@@ -31,7 +80,8 @@
 
 <!-- with 'multiple: true', we have a drop-down selection form -->
 
-<div class='container'>
+<div class='container' id='search'>
+<h3>Search forms are AJAX rendered</h3>
   <div class="row">
     <div class='col'>
       <div>

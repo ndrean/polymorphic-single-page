@@ -1,6 +1,6 @@
 <%= link_to 'Return', root_path %>
 <ol>
-    <% books.each do |book| %>
+    <% @books.each do |book| %>
       <!-- then display only books with reviews-->
         <% if book.reviews.any? %> 
             <li>
