@@ -2,7 +2,7 @@ function insertBooksByAuthor() {
   const divBooksByAuthor = document.getElementById('ajax_books_by_author');
   divBooksByAuthor.innerHTML = "";
   divBooksByAuthor.insertAdjacentHTML('beforeend',
-   '<%= j render "books/books_by_author", author: @author %>')
+   '<%= j render "books/books_by_author", author_books: @author_books %>')
 };
 
 insertBooksByAuthor();

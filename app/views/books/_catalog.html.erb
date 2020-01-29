@@ -2,9 +2,11 @@
     <% authors.each do |a|%>
     <li>
       <%= a.name %> <%= a.country.country %>
+      <ul>
         <% a.books.each do |b| %>
-          <%= b.title %>
+          <li> <%= b.title %> </li>
         <% end %>
-      <% end %>
+      </ul> 
+    <% end %>
     </li>
 </ul>

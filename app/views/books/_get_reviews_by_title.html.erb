@@ -1,6 +1,11 @@
-<h3>The reviews for <%= title %> are:</h3>
 <ul>
     <% reviews_title.each do |r| %>
-        <li><%= r.comment %></li>
+        <li>
+            <%= r.comment %> 
+            <% (0..5).to_a.sample.times do  %>
+                <i class="fa fa-star" ></i>
+            <% end %>
+            by <%= r.user.name %>
+        </li>
     <% end %>
 </ul>

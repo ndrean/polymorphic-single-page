@@ -5,54 +5,78 @@
  We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
 <div>
   <h3>Uncommented books: using a scope and finding nil column on associated table</h3>
-  <%= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
+  <%#= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
    
   <h3>Commented books: using a scope and simply joins</h3>
-  <%= render 'books/reviewed_unreviewed', books: @reviewed_books %>
+  <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
 </div>
 
-<h3>General list</h3>
-<%= render 'books/catalog', authors: @authors %>
+<h3>Search forms are AJAX rendered</h3>
+<%#= render 'books/catalog', authors: @authors %>
 
 <!-- https://medium.com/le-wagon/build-a-simple-search-with-the-simple-form-gem-in-rails-5-b247168282d1> -->
 <!-- standard method is POST so GET is specified here. -->
 <!-- By using a symbol instead of an object, we can get a key in the params. Here  ':book_title' -->
 <!-- so params[:search][:book_title] contains the title -->
 <!-- If we had declared on object say @search, then it would have to be defined, not the case here -->
-<!-- if url:'root_path', means the index (root here) will render, so on the same page (SPA) -->
-<!-- if url:'get...title_path' tells which method is called, and 'remote: true' is the AJAX call -->
+
+<!-- the url:'root_path', means the  result will render on the root page, so on the same page (SPA) -->
+<!-- if url:'get...title_path' tells where to be displayed. It should render another page (related to the -->
+<!-- view convention, but by defining the method as AJAX rendering, the Javascript will render the partial-->
+<!-- where we want. This AJAX call is permitted simply by 'remote: true'  -->
+
 <!-- 'input_field' gets rid of the div and displays the form-group elts inline. -->
+
 <!-- we set collection here as we want the inputs to be controlled -->
-<h3>Search for the reviews of selected books by their title</h3>
-<%= simple_form_for :search, url: get_reviews_by_title_path, remote: true, method: "GET" do |f| %>   
-  <%= f.input_field :input_title, collection: @titles, multiple: true %>
-  <%= f.submit "Search" %>
-<% end %>
-  
-<div id="ajax_review_by_title">
-</div>
+
+<!-- with 'multiple: true', we have a drop-down selection form -->
+
+<div class='container'>
+  <div class="row">
+    <div class='col'>
+      <div>
+        <h5>Reviews on books</h5>
+        <p>(search by title)</p>
+        <%= simple_form_for :search, url: get_reviews_by_title_path, remote: true, method: "GET" do |f| %>   
+          <%= f.input_field :input_title, collection: @titles, multiple: true %>
+          <%= f.submit "Search", class:"btn btn-primary"%>
+        <% end %>
+      </div>
+      
+      <div id="ajax_review_by_title"> <!-- JS injection here --> </div>
+    </div>
 
 
-  <h3>Book catalogue by author</h3>
-  <%= simple_form_for :search, url: get_books_by_author_path, remote: true, method: "GET" do |f| %>   
-      <%= f.input_field :input_name, collection: @list_authors, multiple: true %>
-      <%= f.submit "Search" %>
-  <% end %>
-  
-  <div id="ajax_books_by_author"> </div>
+    <div class='col'>
+      <div>
+        <h5>Books by author</h5>
+        <%= simple_form_for :search, url: get_books_by_author_path, remote: true, method: "GET" do |f| %>   
+            <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
+            <%= f.button :submit, "Search", class:"btn-primary" %>
+        <% end %>
+      </div>
+      
+      <div id="ajax_books_by_author"> </div>
+    </div>
 
 
-<h3>Comments made by the users: (usage of "reviewable")</h3>
-<%# if  false %>
-<%= simple_form_for :search, url: get_reviews_by_user_path, remote: true, method: "GET" do |f| %>   
-    <%= f.input_field :user_name, collection: @users_names %>
-    <%= f.submit "Search" %>
-  <% end %>
-<%# end %>
+    <div class='col'>
+      <div>
+        <h5>Comments from the users</h5>
+        <p>(usage of "reviewable")</p>
+        <%= simple_form_for :search, url: get_reviews_by_user_path, remote: true, method: "GET" do |f| %>   
+          <%= f.input_field :user_name, collection: @users_names, multiple: true %>
+          <%= f.submit "Search", class:"btn btn-primary" %>
+        <% end %>
+      </div>
 
-<div id="ajax_reviews_by_user">
-  <% if @name == nil %>
-    <h3>All comments by users: usage of "reviewable"</h3>
-    <%= render 'books/users_reviews', users: @users %>
-  <% end %>
+      <div id="ajax_reviews_by_user">
+        <% if false && @name == nil %>
+          <h3>All comments by users: usage of "reviewable"</h3>
+          <%= render 'books/users_reviews', users: @users %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
 </div>
