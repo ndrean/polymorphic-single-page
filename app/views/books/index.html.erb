@@ -1,64 +1,128 @@
-<h1>Polymorphism, Ajax and Single Page</h1>
+<div class="container">
+  <div class="row">
+  <h1>Ajax rendering, Forms in Single Page, Polymorphism</h1>
+  </div>
+</div>
 
-<%#= simple_form_for :search, url: new_path, method: "GET" do |f| %>   
-  <%#= f.input_field :input %>
-  <%#= f.submit "Search", class:"btn btn-primary"%>
-<% #end %>
 
-<h3>3 rendering methods:  partials within a page, link_to another page, AJAX display via a link</h3>
-<%#= render partial: 'books/reviews_all',  locals: {books: @books}  %>
-<a href="#search"> Go to the Ajax search section </a>
-<div class="container"><div class="row">
 
-<div class="col">
-  <p>The HTTP request 'url = ../books/index' displays the file '../views/index.html.erb' and the needed data is served by the
-  controller/method  'books#index'. This column contains a 'render' declaration to display the partial 'views/_reviews_all.html.erb'. The data is furnished by the method 'books#index'
-  so this column is loaded-displayed every time the index page is  loaded. When clicking on the 'return'
-   link, this reloads the whole page. Since the stars bellow are randomly set, they will change at each reload.
-   The button bellow just toggles the CSS class display:block/none</p>
 
-  <button class="btn btn-primary" id="hideBtn"> Hide / Show bellow </button>
-  <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
-  <div id="hideMe">
-    <%= render 'books/reviews_all', books: @books %></div>
+<div class="container">
+
+<div class="row">
+  <h3><a href="#cookie"> Form in single page with a cookie</a>  </h3>
+  </div>
+  <div class="row">
+  <h3><a href="#3 rendering"> Three rendering methods</a>  </h3>
   </div>
 
-<div class="col">
-  <p> The link bellow makes a HTTP request 'url= ../books/reviews_all' to display the file  '../views/reviews_all',
-  which in served by the method 'books#reviews_all' for the data.
-  The same info is displayd, but through the copy of the
-  partial without the _underscore, ie 'books/reviews_all.html.erb'. This time, the data is furnished by the method
-  books#reviews_all' which 'lazy' renders '../books/reviews_all.html' with Rails naming association convention.
-  </p>
-  <p><%= link_to 'All reviews in another page', reviews_all_path %> </p>
+  <div class="row">
+    <h3><a href="#search"> Ajax form single page search </a></h3>
+  </div>
+
+  <div class="row">
+    <h3><a href="#API JSON"> API call and JSON rendering </a></h3>
+  </div>
+
 </div>
 
-<div class="col">
-  <p>AJAX rendering on same page. The link bellow triggers the method 'books#reviews_all_ajax'
-  which will call the Javascript file '../views/reviews_all_ajax.js.erb', which will display
-  the same partial 'views/_reviews_all.html.erb'. This method also furnishes the data. The display location needs to given and 
-  is identified by setting and id to a div. . There is no page reload this time because the stars
-  in the first column won't change (random). When clicking 'All reviews', the stars within this column
-  will change but not the first column. When clcking 'return', this will reload the page, 
-  so the stars in the first column will change and te data bellow too, since this returns to the initial state.</p>
-  <p><%= link_to 'All reviews', reviews_all_ajax_path, remote: true %></p>
+<div class="container" id="cookie">
+  <h4>Submitting a form in this single page via a cookie with no Javascript</h4>
+  <p>The input of this form will be transmitted to this page via a cookie. The controller method saves the params in the cookie, 
+  and we redirect_to this page. A waiting partial is waiting bellow for an input. Once submitted, the input appears bellow. 
+  We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
+  a page refresh will reset the partial (this is the case here);</p>
 
-  <div id = "Ajax review all"></div>  
+  <%= simple_form_for :search, url: get_form_path do |f| %>   
+    <%= f.input_field :input %>
+    <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
+  <% end %>
+  <p>The submission is 'POST' by default. The controller reads the params and will fill the partial '_form.html.erb' with the input stored in a cookie, 'cookies[:form]' here for example.
+  Then the controller redirect_to this page, so reloads it.</p>
+  <h6>   <%= render 'books/form'  %></h6>
+  <% cookies.delete :form %>
+  <br>
+  <%= simple_form_for :search, url: get_form_ajax_path, remote: true do |f| %>   
+    <%= f.input_field :input %>
+    <%= f.button :submit, "Display via AJAX", class:"btn btn-primary", id:"myform"%>
+    
+  <% end %>
+  <h6 id="ajax form"></h6>
+  <p>We specify the url to fetch the 'POST' method, and since we use 'remote:true', it will call a Javascript function that will render an HTML
+   string into the HTML attribute of a DOM element. Note that it is MANDATORY to use 'f.button :submit'.</p>
 </div>
+
+<div class="row" id='3 rendering'>
+  <div class="container">
+    <h4>Three rendering methods: partials within a page, link_to another page, AJAX display in the page via a link</h4>
+    <div class="row">
+      
+      <div class="col">
+        <p>The HTTP request 'url = /books/index' displays the file '../views/index.html.erb' and the needed data is served by the
+        controller/method  'books#index'. This column contains a 'render' declaration to display the partial 'views/_books_all.html.erb'.
+         The data is furnished by the method 'books#index' so this column is loaded-displayed every time the index page is loaded.
+          We precise how the variables furnished by the controller are passed to partials in this way :</p>
+        <p> % render partial: 'books/books_all',  locals: {books: @books} %</p>
+        <p> When clicking on the 'return' link, this reloads the whole page. Since the stars bellow are randomly
+        set, they will change at each reload.</p>
+        <p> The button bellow just toggles a CSS class '.not-active { display:none; }' to ON/OFF via Javascript function 'classListToggle('not-active').</p>
+
+        <button class="btn btn-primary" id="hideBtn"> Hide / Show bellow all books </button>
+        <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
+        <div id="hideMe" > <!-- class="not-active" -->
+          <%= render 'books/books_all', books: @books, cached: true %></div>
+          <%#= render partial: 'books/books_all',  locals: {books: @books} %>
+        </div>
+
+      <div class="col">
+        <p> The link bellow makes a HTTP request 'url= ../books_all' to display the file  '/views/books_all', which in served by the method 'books#books_all' for the data. </p>
+        <p>% link_to 'View books in another page', books_all_path % </p>
+        <p>This is a link to a new page. We pass directly the instance '@books' to the view which uses '@books'. This is different from partials, which use a local variable,
+         'books: @books'.</p>
+        <p> The same info is displayed, but through the copy of the partial without the _underscore, ie 'books/reviews_all.html.erb'. 
+        This time, the data is furnished by the method books#reviews_all' which 'lazy' renders '../books/books_all.html' with Rails naming association convention. </p>
+
+        <p><%= link_to 'View books in another page', books_all_path, class:'btn btn-primary' %> </p>
+      </div>
+
+      <div class="col">
+        <p>AJAX rendering on same page. The link:</p>
+        <p>%= link_to 'All books with AJAX', books_all_ajax_path, remote: true %</p>
+        calls the method 'books#books_all_ajax' which will respond with corresponding Javascript file '../views/books_all_ajax.js.erb', which will display the same partial
+         'views/_books_all.html.erb'. The controller's method furnishes the data, and the JS function will ask to render the partial at a desingned location, given by setting
+         an id to a div for example. There is no page reload this time because the stars in the first column won't change (random). 
+         When clicking 'All reviews', the stars within this column will change but not the first column. When clcking 'return', this will reload the page, 
+        so the stars in the first column will change and te data bellow too, since this returns to the initial state.</p>
+
+        <p><%= link_to 'View all books with AJAX', books_all_ajax_path, remote: true, class:'btn btn-primary' %></p>
+
+        <div id = "Ajax books all"></div>  
+
+      </div>
+    </div>
+  </div>   
 </div>
-</div>      
+     
 
 
 <p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
  We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
-<div>
-  <h3>Uncommented books: using a scope and finding nil column on associated table</h3>
-  <%#= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
-   
-  <h3>Commented books: using a scope and simply joins</h3>
-<%= link_to 'Comment books', root_path %>
-  <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
+<div class="container">
+  <div class="row">
+
+    <h3>Uncommented books: using a scope and finding nil column on associated table</h3>
+    <%= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
+
+  </div>
+  <div class="row">
+
+    <h3>Commented books: using a scope and simply joins</h3>
+    <%= link_to 'Comment books', root_path %>
+    <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
+    
+  </div>
 </div>
+
 
 
 <%#= render 'books/catalog', authors: @authors %>
@@ -130,3 +194,5 @@
     </div>
   </div>
 </div>
+
+<div class="container" id="API JSON"></div>

@@ -9,16 +9,21 @@ User.destroy_all
 puts 'creating'
 
 a,g =  [],[];
-5.times do
+20.times do
   u = User.create! name: Faker::Name.name
   c = Country.create!( country: Faker::Nation.flag)
   a << Author.create!(name: Faker::Book.author, country: c) #Country.find((i..l).to_a.sample)
   g << Genre.create!( name: Faker::Book.genre)
 end
 
-10.times do
-  b = Book.create! title: Faker::Book.title, author: a.sample, genre: g.sample
-end
+a.each do |aa|
+  5.times do
+    Book.create! title: Faker::Book.title, author: aa, genre: g.sample
+  end
+end 
+
+
+
 
 b1 = Book.first.id
 bn = Book.count
@@ -34,7 +39,7 @@ end
 
 (u1..u1+un-1).each do |iu|
   (b1..b1+bn-5).each do |ib|
-    # on garde 2 book sans review
+    # on garde 4 book sans review
     Review.create!(reviewable: Book.find(ib), user:User.find(iu), comment: arr.sample )
   end
   (a1..a1+an-1).each do |ia|

@@ -2,7 +2,7 @@ class BooksController < ApplicationController
 
   def index
     
-    @books = Book.includes({reviews: :user}, {author: :country}, :genre)
+    @books = Book.includes( :genre, {author: :country}) #{reviews: :user},
     @users = User.includes(reviews: :reviewable)
     
     # => since user => books declared with "through: :reviews"
@@ -14,9 +14,9 @@ class BooksController < ApplicationController
     @reviewed_books = Book.reviewed
 
     # collections for select forms
-    @titles = Book.titles # from model
-    @users_names = User.pluck(:name)
-    @list_authors = Author.pluck(:name)
+    @titles = Book.order(:title).titles # from model
+    @users_names = User.order(:name).pluck(:name)
+    @list_authors = Author.order(:name).pluck(:name)
     
   end
 
@@ -27,7 +27,7 @@ class BooksController < ApplicationController
     if query.present? && !@title.empty?
       @reviews_title = []
       @title[1..-1].each do |t|
-        @reviews_title += Book.includes(:reviews => [:user]).find_by_title(t).reviews
+        @reviews_title += Book.includes(reviews: :user).find_by_title(t).reviews
       end
     end
 
@@ -74,30 +74,41 @@ class BooksController < ApplicationController
 
   end
   
-# if we make the HTTP request 'url = .../books/reviews_all' (or an alias depending upon root),
- # this will trigger the action 'reviews_all' in the controller 'books', since this association
+# if we make the HTTP request 'url = .../books/books_all' (or an alias depending upon root),
+ # this will trigger the action 'books_all' in the controller 'books', since this association
   # is declared in 'routes.rb'
 
-  def reviews_all
-    @books = Book.includes({reviews: :user}, {author: :country}, :genre ).all
+  def books_all
+    @books = Book.includes( {author: :country}, :genre ).all
     
-    # => this will 'lazy' render 'books/reviews_all.html.erb' with this view using @books 
+    # => this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
 
     # if we declare a partial 'books/_reviews_all.html.erb', se can use it with:
-    #render partial: 'books/reviews_all', locals: {books: Book.all} 
+    #render partial: 'books/books_all', locals: {books: Book.all} 
     #and this partial uses locally the variable 'books'
-
   end
 
-  def reviews_all_ajax
-    @books = Book.includes({reviews: :user}, {author: :country}, :genre ).all
+  def books_all_ajax
+    @books = Book.includes( {author: :country}, :genre ).all
     respond_to do |format|
       format.js
     end
   end
 
-  private
-  # def search_params
-  #   params.require(:search).permit(:name)
-  # end
+  def get_form
+    if params[:search].present?
+      cookies[:form] = params[:search][:input]
+      #redirect_to root_path
+    end
+  end
+  
+  def get_form_ajax
+    if params[:search].present?
+      @input = params[:search][:input]
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
 end
