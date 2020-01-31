@@ -5,7 +5,7 @@
     <% books.each do |book| %>
         <li>
             <strong><%= book.title %></strong> [ <em><%= book.genre.name %></em> ] 
-            by <%= book.author.name %> <%= book.author.country.country %>
+            by <%= book.author.name %> <%= book.author.country.name %>
             <% (0..5).to_a.sample.times do  %>
                 <i class="far fa-star" ></i>
             <% end %>

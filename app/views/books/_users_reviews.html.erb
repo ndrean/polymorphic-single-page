@@ -7,12 +7,12 @@
             <% if review.reviewable_type == 'Book' %>
                 <li>
                     "<%= review.comment %>" about the book "<%= review.reviewable.title %>" 
-                    by <%= review.reviewable.author.name %> <%= review.reviewable.author.country.country %>
+                    by <%= review.reviewable.author.name %> <%= review.reviewable.author.country.name %>
                 </li>
             <% else %>
                 <li>
                     "<%= review.comment %>" on the writter 
-                    <%= review.reviewable.name %> <%= review.reviewable.country.country %>
+                    <%= review.reviewable.name %> <%= review.reviewable.country.name %>
                     </li>
             <% end %>
 

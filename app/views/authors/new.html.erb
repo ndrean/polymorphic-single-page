@@ -1,0 +1,43 @@
+<h1 class="text-center">Authors#new</h1>
+<div class="container">
+    <div class="row border">
+        <div class="col">
+            <div class="form-group">
+            <%= simple_form_for @author do |f| %>
+                <%= f.input :name %>
+                <%= f.association :country %>
+            </div>
+        </div>
+        <br>
+    </div>
+    <br>
+    <button id = 'add book?'> Add a book </button>
+    <br>
+    <div class="row border" >
+        <div class="col" id="new book">
+        <div class="form-group">
+            <%= f.simple_fields_for :books  do |ff| %>
+                <%= render 'books/form_create_book', f: ff %>
+            <% end %>
+            <%#= link_to_add_fields 'Add a book', f, @books %>
+        </div>
+        </div>
+        <div class="col" id="new book">
+        <div class="form-group">
+            <%= f.simple_fields_for :books  do |ff| %>
+                <%= render 'books/form_create_book', f: ff %>
+            <% end %>
+            <%#= link_to_add_fields 'Add a book', f, @books %>
+        </div>
+        </div>
+        
+    </div>
+
+    <div >
+        <%= f.submit "Create"%>
+    </div>
+    <% end %>
+</div>
+
+
+

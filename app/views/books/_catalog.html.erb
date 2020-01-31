@@ -1,7 +1,7 @@
 <ul>
     <% authors.each do |a|%>
     <li>
-      <%= a.name %> <%= a.country.country %>
+      <%= a.name %> <%= a.country.name %>
       <ul>
         <% a.books.each do |b| %>
           <li> <%= b.title %> </li>

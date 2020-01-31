@@ -1,5 +1,5 @@
 function insertBooks() {
-  const divBooks = document.getElementById('Ajax books all');
+  const divBooks = document.getElementById('ajax-books-all');
   divBooks.innerHTML = "";
   divBooks.insertAdjacentHTML('beforeend',
    '<%= j render "books/books_all", books: @books, cached: true %>')

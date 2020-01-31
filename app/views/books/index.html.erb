@@ -5,15 +5,17 @@
 </div>
 
 
-
+<%= link_to 'Create Book', new_book_path %>
+<br>
+<%= link_to 'Create Author / Book', new_author_path %>
 
 <div class="container">
 
 <div class="row">
-  <h3><a href="#cookie"> Form in single page with a cookie</a>  </h3>
+  <h3><a href="#cookie"> Form with no model in single page with a cookie</a>  </h3>
   </div>
   <div class="row">
-  <h3><a href="#3 rendering"> Three rendering methods</a>  </h3>
+  <h3><a href="#3-rendering"> Three rendering methods</a>  </h3>
   </div>
 
   <div class="row">
@@ -21,38 +23,65 @@
   </div>
 
   <div class="row">
-    <h3><a href="#API JSON"> API call and JSON rendering </a></h3>
+    <h3><a href="#API-JSON"> API call and JSON rendering </a></h3>
   </div>
 
 </div>
 
 <div class="container" id="cookie">
-  <h4>Submitting a form in this single page via a cookie with no Javascript</h4>
-  <p>The input of this form will be transmitted to this page via a cookie. The controller method saves the params in the cookie, 
-  and we redirect_to this page. A waiting partial is waiting bellow for an input. Once submitted, the input appears bellow. 
+  <h5>Submitting a form with no model in this single page via a cookie (no JS)</h5>
+  <p>The input of this form will be transmitted to this page via a cookie. This form is 'POST' by default, and controlled by a method
+   'books#get_form' with a 'POST' route.
+  The controller method saves the params in a cookie, just declared by naming it, for example 'cookies[:form]' here.
+   Then the method 'redirect_to' this same page. There is a partial '_form.html.erb' bellow waiting for an input: %= render 'books/form'  % . Once submitted, the input appears bellow. 
   We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
-  a page refresh will reset the partial (this is the case here);</p>
+  a page refresh will reset the partial (this is the case here).</p>
 
   <%= simple_form_for :search, url: get_form_path do |f| %>   
     <%= f.input_field :input %>
     <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
   <% end %>
-  <p>The submission is 'POST' by default. The controller reads the params and will fill the partial '_form.html.erb' with the input stored in a cookie, 'cookies[:form]' here for example.
-  Then the controller redirect_to this page, so reloads it.</p>
-  <h6>   <%= render 'books/form'  %></h6>
+
+  Result: <h6> <%= render 'books/form'  %></h6>
   <% cookies.delete :form %>
   <br>
-  <%= simple_form_for :search, url: get_form_ajax_path, remote: true do |f| %>   
-    <%= f.input_field :input %>
-    <%= f.button :submit, "Display via AJAX", class:"btn btn-primary", id:"myform"%>
+  <h5>Submitting a form in this single page via AJAX.</h5>
+  <div class="row">
+    <div class="col">
+    <%= simple_form_for :search, url: get_form_ajax_path, remote: true do |f| %>   
+    <%= f.input_field :input, id:"input1" %> <!-- .input_field to put aligned -->
+    <%= f.submit "Simple_form remote / AJAX", class:"btn btn-primary"%>
+
+    <!-- Note: for a custom button, we do: -->
+    <!--  <%= f.button :submit, 'Search!' do %> -->
+    <!--            my custom button text           -->
+    <!--      <% end %>                             -->
     
   <% end %>
-  <h6 id="ajax form"></h6>
-  <p>We specify the url to fetch the 'POST' method, and since we use 'remote:true', it will call a Javascript function that will render an HTML
-   string into the HTML attribute of a DOM element. Note that it is MANDATORY to use 'f.button :submit'.</p>
-</div>
+    </div>
+    <div class="col">
+    <%= form_with url:'/get_form_ajax2' do |f| %>
+    <%= f.text_field :input, id:"input2" %>
+    <%= f.submit "'book/form_with'", class:"btn btn-primary"%>
+  <% end %>
+    </div>
+  </div>
+  
+  <p>We specify the url to fetch the 'POST' method, and since we use 'remote:true' 
+  with 'simple_form_for', and nothing with 'form_with' (it's remote: ture by default).
+  It will call a Javascript function that will render an HTML
+   string into the HTML attribute of a DOM element.</p>
 
-<div class="row" id='3 rendering'>
+  Result: <h6 id="ajax-form"></h6>
+  <br>
+  <h5> Submit 'POST' route with 'form-with'. </h5>
+  
+  
+
+  
+  </div>
+
+<div class="row" id='3-rendering'>
   <div class="container">
     <h4>Three rendering methods: partials within a page, link_to another page, AJAX display in the page via a link</h4>
     <div class="row">
@@ -82,21 +111,22 @@
         <p> The same info is displayed, but through the copy of the partial without the _underscore, ie 'books/reviews_all.html.erb'. 
         This time, the data is furnished by the method books#reviews_all' which 'lazy' renders '../books/books_all.html' with Rails naming association convention. </p>
 
-        <p><%= link_to 'View books in another page', books_all_path, class:'btn btn-primary' %> </p>
+        <p><%= link_to "View 'books.json' in another page", books_display_json_path, class:'btn btn-primary' %> </p>
+        <p> "render json: @books"</p>
       </div>
 
       <div class="col">
         <p>AJAX rendering on same page. The link:</p>
-        <p>%= link_to 'All books with AJAX', books_all_ajax_path, remote: true %</p>
-        calls the method 'books#books_all_ajax' which will respond with corresponding Javascript file '../views/books_all_ajax.js.erb', which will display the same partial
+        <p>%= link_to 'All books with AJAX', books_ajax_path, remote: true %</p>
+        calls the method 'books#books_ajax' which will respond with corresponding Javascript file '../views/books_all_ajax.js.erb', which will display the same partial
          'views/_books_all.html.erb'. The controller's method furnishes the data, and the JS function will ask to render the partial at a desingned location, given by setting
          an id to a div for example. There is no page reload this time because the stars in the first column won't change (random). 
          When clicking 'All reviews', the stars within this column will change but not the first column. When clcking 'return', this will reload the page, 
         so the stars in the first column will change and te data bellow too, since this returns to the initial state.</p>
 
-        <p><%= link_to 'View all books with AJAX', books_all_ajax_path, remote: true, class:'btn btn-primary' %></p>
+        <p><%= link_to 'View all books with AJAX', books_ajax_path, remote: true, class:'btn btn-primary' %></p>
 
-        <div id = "Ajax books all"></div>  
+        <div id = "ajax-books-all"></div>  
 
       </div>
     </div>
@@ -195,4 +225,4 @@
   </div>
 </div>
 
-<div class="container" id="API JSON"></div>
+<div class="container" id="API-JSON"></div>

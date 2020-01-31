@@ -5,7 +5,7 @@
         <% if book.reviews.any? %> 
             <li>
                 <strong><%= book.title %></strong> [ <em><%= book.genre.name %></em> ] 
-                by <%= book.author.name %> <%= book.author.country.country %>
+                by <%= book.author.name %> <%= book.author.country.name %>
                 <ul>
                     <h3> Users reviews </h3>
                     <% book.reviews.each do |review| %>

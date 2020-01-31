@@ -1,8 +1,9 @@
 function injectForm() {
-  console.log('ici');
-  const divForm = document.getElementById('ajax form');
+  const divForm = document.getElementById('ajax-form');
+  const divInput1 = document.getElementById('input1');
   divForm.innerHTML = "";
-  divForm.insertAdjacentHTML('beforeend', '<%= j render "books/formj", input: @input %>')
+  divForm.insertAdjacentHTML('beforeend', '<%= j render "books/formj", input: @input %>');
+  //divForm.textContent = '<%= j render "formj", input: @input %>';
 };
 
 injectForm();

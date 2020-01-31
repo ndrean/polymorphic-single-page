@@ -1,5 +1,5 @@
 function insertReviewsAll() {
-  const divReviewsAll = document.getElementById('Ajax review all');
+  const divReviewsAll = document.getElementById('Ajax-review-all');
   divReviewsAll.innerHTML = "";
   divReviewsAll.insertAdjacentHTML('beforeend',
    '<%= j render "books/reviews_all", books: @books %>')

@@ -9,9 +9,9 @@ User.destroy_all
 puts 'creating'
 
 a,g =  [],[];
-20.times do
+5.times do
   u = User.create! name: Faker::Name.name
-  c = Country.create!( country: Faker::Nation.flag)
+  c = Country.create!( name: Faker::Nation.flag)
   a << Author.create!(name: Faker::Book.author, country: c) #Country.find((i..l).to_a.sample)
   g << Genre.create!( name: Faker::Book.genre)
 end
@@ -33,7 +33,7 @@ a1 = Author.first.id
 an = Author.count
 
 arr = []
-200.times do
+50.times do
   arr << Faker::Music.album
 end
 

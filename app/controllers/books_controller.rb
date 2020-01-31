@@ -78,8 +78,9 @@ class BooksController < ApplicationController
  # this will trigger the action 'books_all' in the controller 'books', since this association
   # is declared in 'routes.rb'
 
-  def books_all
+  def display_json
     @books = Book.includes( {author: :country}, :genre ).all
+    render json: @books
     
     # => this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
 
@@ -88,7 +89,7 @@ class BooksController < ApplicationController
     #and this partial uses locally the variable 'books'
   end
 
-  def books_all_ajax
+  def books_ajax
     @books = Book.includes( {author: :country}, :genre ).all
     respond_to do |format|
       format.js
@@ -98,7 +99,7 @@ class BooksController < ApplicationController
   def get_form
     if params[:search].present?
       cookies[:form] = params[:search][:input]
-      #redirect_to root_path
+      redirect_to root_path
     end
   end
   
@@ -111,4 +112,35 @@ class BooksController < ApplicationController
     end
   end
 
+  def get_form_ajax2
+      # call by 'form_with'
+      @input = params[:input]
+      respond_to do |format|
+        format.js
+      end
+  end
+
+  def new
+    @book = Book.new
+  end
+
+  def create
+    @book  = Book.new(book_params)
+    if @book.save
+      redirect_to root_path
+    else
+      flash[:error] = "a bug."
+      render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+  end
+
+  def book_params
+    params.require(:book).permit(:title,  :author_id)
+  end
 end
