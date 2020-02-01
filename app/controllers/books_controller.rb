@@ -21,7 +21,7 @@ class BooksController < ApplicationController
     # Nested form through association: new author > new book < new genre
     @author = Author.new
     @author.books.build#.genre.build
-    #@new_genre = Genre.new(name: "Click to add new genre")
+    #@new_genre = Genre.create!(name: "Click to add new genre")
     @genres =  Genre.all
     @genre = Genre.new
   end
@@ -152,18 +152,26 @@ class BooksController < ApplicationController
 
 
   def create
+  
+    #Genre.destroy(Genre.last.id)
     @author = Author.new(author_params)
     #@genre = Genre.find(author_params)
     if @author.save
+      flash[:success] = "ok"
       redirect_to root_path
     else
       flash[:error] = "a bug."
-      render :new
+      redirect_to new_book_path
     end
   end
 
   def author_params
+    # version select ok
+    #params.require(:author).permit(:name,  :country_id, :genre, books_attributes:  [:title, :genre_id, '_destroy'])
+    
+    # Ok pour version radio
     params.require(:author).permit(:name,  :country_id, :genre,
         books_attributes:  [:title, :genre_id, '_destroy'])
+ 
   end
 end
