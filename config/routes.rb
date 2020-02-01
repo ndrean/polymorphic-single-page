@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  #get 'authors/new'
-  #get 'authors/create'
+  
   get 'users/new'
   get 'users/create'
   root to: 'books#index'
@@ -15,11 +14,12 @@ Rails.application.routes.draw do
   post 'get_form_ajax', to: 'books#get_form_ajax', as: 'get_form_ajax'
   post 'get_form_ajax2', to: 'books#get_form_ajax2', as: 'get_form_ajax2'
 
-  resources :books, only: [:new, :create]
-  resources :authors, only: [:new, :create]
+  resources :books, only: [:index, :new, :create]
+  resources :authors, only: [:new, :create, :edit, :update]
 
-  #post 'books/create'
-  #get 'books/new' (,to: 'books#new', as: 'new_book')
+  #get 'authors/new', to: 'authors#new', as: 'new_author' #=> voir RAILS ROUTES
+  #post 'authors/create'
+  
 end
 
 # by declaring 'root: 'books#index', we can get rid of the 'books/' prefix and the alias

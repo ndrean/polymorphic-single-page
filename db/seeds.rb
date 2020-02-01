@@ -8,6 +8,10 @@ User.destroy_all
 
 puts 'creating'
 
+100.times do
+  Country.create!(name: Faker::Nation.flag)
+end
+
 a,g =  [],[];
 5.times do
   u = User.create! name: Faker::Name.name

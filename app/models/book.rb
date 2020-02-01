@@ -8,6 +8,8 @@ class Book < ApplicationRecord
   # => (Book.first).users
   # => Book.joins(:users).where("users.name ILIKE ?", "%Ilene%") is possible now
 
+  #accepts_nested_attributes_for :genres
+
   scope :reviewed_by, -> (name) {merge(User.set_name(name).references(:users))}
   # uses the scope 'set_name' defined in the model 'User'. 'references(:users) needed.
 

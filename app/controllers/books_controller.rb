@@ -2,7 +2,7 @@ class BooksController < ApplicationController
 
   def index
     
-    @books = Book.includes( :genre, {author: :country}) #{reviews: :user},
+    @books = Book.includes( {author: :country}, :genre ) #{reviews: :user},
     @users = User.includes(reviews: :reviewable)
     
     # => since user => books declared with "through: :reviews"
@@ -18,6 +18,12 @@ class BooksController < ApplicationController
     @users_names = User.order(:name).pluck(:name)
     @list_authors = Author.order(:name).pluck(:name)
     
+    # Nested form through association: new author > new book < new genre
+    @author = Author.new
+    @author.books.build#.genre.build
+    #@new_genre = Genre.new(name: "Click to add new genre")
+    @genres =  Genre.all
+    @genre = Genre.new
   end
 
   def get_reviews_by_title
@@ -79,8 +85,8 @@ class BooksController < ApplicationController
   # is declared in 'routes.rb'
 
   def display_json
-    @books = Book.includes( {author: :country}, :genre ).all
-    render json: @books
+    @books = Book.includes(:author, :genre)
+    render json: @books.to_json(include:  {author: {only: :name}, genre: {only: :name}})
     
     # => this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
 
@@ -90,7 +96,7 @@ class BooksController < ApplicationController
   end
 
   def books_ajax
-    @books = Book.includes( {author: :country}, :genre ).all
+    @books = Book.includes( {author: :country}, :genre )
     respond_to do |format|
       format.js
     end
@@ -120,13 +126,35 @@ class BooksController < ApplicationController
       end
   end
 
-  def new
-    @book = Book.new
-  end
+  # def new
+  #   @book = Book.new
+  # end
+
+  # def create
+  #   @book  = Book.new(book_params)
+  #   if @book.save
+  #     redirect_to root_path
+  #   else
+  #     flash[:error] = "a bug."
+  #     render :new
+  #   end
+  # end
+
+  # def edit
+  # end
+
+  # def update
+  # end
+
+  # def book_params
+  #   params.require(:book).permit(:title,  :author_id)
+  # end
+
 
   def create
-    @book  = Book.new(book_params)
-    if @book.save
+    @author = Author.new(author_params)
+    #@genre = Genre.find(author_params)
+    if @author.save
       redirect_to root_path
     else
       flash[:error] = "a bug."
@@ -134,13 +162,8 @@ class BooksController < ApplicationController
     end
   end
 
-  def edit
-  end
-
-  def update
-  end
-
-  def book_params
-    params.require(:book).permit(:title,  :author_id)
+  def author_params
+    params.require(:author).permit(:name,  :country_id, :genre,
+        books_attributes:  [:title, :genre_id, '_destroy'])
   end
 end

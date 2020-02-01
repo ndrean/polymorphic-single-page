@@ -4,4 +4,6 @@ require("channels")
 
 import "bootstrap";
 
-import { toggleDiv } from "../components/toggleDiv"
+import { toggleDiv } from "../components/toggleDiv";
+
+import { gestionGenres } from "../components/gestionGenres"

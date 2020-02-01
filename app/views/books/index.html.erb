@@ -1,16 +1,15 @@
 <div class="container">
   <div class="row">
-  <h1>Ajax rendering, Forms in Single Page, Polymorphism</h1>
+  <h1>Ajax rendering, Forms, Nested Polymorphism</h1>
   </div>
 </div>
 
 
-<%= link_to 'Create Book', new_book_path %>
-<br>
-<%= link_to 'Create Author / Book', new_author_path %>
 
 <div class="container">
-
+<div class="row">
+<h3> <a href="#create"> Create/Edit an author, book, review</a></h3>
+</div>
 <div class="row">
   <h3><a href="#cookie"> Form with no model in single page with a cookie</a>  </h3>
   </div>
@@ -27,8 +26,23 @@
   </div>
 
 </div>
+<div class="container" id="create">
+  <h3> Triple associated 'has_may / belongs_to' nested form to CREATE an author, his books and set it's genre</h3>
 
-<div class="container" id="cookie">
+  <%= link_to 'Create Author / Book', new_author_path %>
+
+  <%#= simple_form_for @author, url: new_book_path do |f| %>
+    <%#= f.input :name %>
+    <%#= f.association :country %>    
+    <%#= f.submit "Create"%>
+  <% #end %>
+      
+  <%= render 'authors/new', author: @author  %>
+<h3> Triple associated 'has_may / belongs_to' nested form to EDIT an author or a book and it's genre</h3>
+</div>
+
+<div class="container" id="cookie"> 
+<h3>Form with no model in single page</h3>
   <h5>Submitting a form with no model in this single page via a cookie (no JS)</h5>
   <p>The input of this form will be transmitted to this page via a cookie. This form is 'POST' by default, and controlled by a method
    'books#get_form' with a 'POST' route.
@@ -37,7 +51,7 @@
   We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
   a page refresh will reset the partial (this is the case here).</p>
 
-  <%= simple_form_for :search, url: get_form_path do |f| %>   
+  <%= simple_form_for( :search, url: get_form_path) do |f| %>   
     <%= f.input_field :input %>
     <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
   <% end %>
@@ -73,13 +87,7 @@
    string into the HTML attribute of a DOM element.</p>
 
   Result: <h6 id="ajax-form"></h6>
-  <br>
-  <h5> Submit 'POST' route with 'form-with'. </h5>
-  
-  
-
-  
-  </div>
+</div>
 
 <div class="row" id='3-rendering'>
   <div class="container">

@@ -1,4 +1,4 @@
-<h5 class="text-center">partial <em>authors#new.html.erb</em>  linked with the controller <em>authors</em></h5>
+<h5 class="text-center">partial <em>authors#_new.html.erb</em> linked with the controller <em>books</em> </h5>
 <%= link_to 'Back', root_path %>
 <ul>
     <li>The view <em>/view/books/index</em> calls for rendering the partial <em>/views/authors/_new</em>.
@@ -19,8 +19,9 @@
         <div class="col-sm-12 col-md-6 border">
             <div class="form-group">
             <br>  
-            <%= simple_form_for @author, wrapper: :horizontal_form do |f| %>
+            <%= simple_form_for @author, url: books_path do |f| %>
                 <%= f.input :name %>
+                <br>
                 <%= f.association :country %>
                 <%#= f.input :country, collection: Country::COUNTRIES %>
             </div>
@@ -35,7 +36,7 @@
                 <div class="form-group">
                 <br>
 <!-- if I move the whole .form-group into the partial then I can't use the selection on Genre -->          
-                    <%= f.simple_fields_for :books  do |ff| %>
+                    <%= f.simple_fields_for :books  do |ff| %>                   
                         <%= render 'books/book_fields', f: ff %>
                     <% end %>
                 </div>
