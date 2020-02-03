@@ -1,4 +1,4 @@
-<h5 class="text-center">partial <em>authors#new.html.erb</em>  linked with the controller <em>authors</em></h5>
+<h5 class="text-center">partial <em>authors#_new.html.erb</em> linked with the controller <em>books</em> </h5>
 <%= link_to 'Back', root_path %>
 <ul>
     <li>The view <em>/view/books/index</em> calls for rendering the partial <em>/views/authors/_new</em>.
@@ -18,11 +18,17 @@
     <div class="row">
         <div class="col-sm-12 col-md-6 border">
             <div class="form-group">
-            <br>  
-            <%= simple_form_for @author, wrapper: :horizontal_form do |f| %>
-                <%= f.input :name %>
-                <%= f.association :country %>
-                <%#= f.input :country, collection: Country::COUNTRIES %>
+            <!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
+            <%= simple_form_for @author, url: authors_path do |f| %>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <%= f.error_notification %>
+                        <%= f.input_field :name, placeholder: "Author's name" %>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <%= f.association :country, prompt: "Select a country", label: false %>
+                    </div>
+                </div>
             </div>
         </div>
         <br>
@@ -30,19 +36,19 @@
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
     <br>
     <div class="row">
-        <div class="col-sm-12 col-md-6 border">
+        <div class="col-sm-12 col-md-6 border p-2">
             <div class="col" id="new book">
                 <div class="form-group">
-                <br>
 <!-- if I move the whole .form-group into the partial then I can't use the selection on Genre -->          
-                    <%= f.simple_fields_for :books  do |ff| %>
-                        <%= render 'books/book_fields', f: ff %>
-                    <% end %>
+                                      
+                        <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
+                        <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
+                        
                 </div>
             </div>
         </div>
     </div>
-    <div>
+    <div class="row">
         <%= f.submit "Create", class:"btn btn-primary"%>
         <% end %>
     </div>
@@ -51,6 +57,8 @@
         <%#= link_to_add_fields 'Add new book', f, :books %>
         
 </div>
+
+
 
 
 

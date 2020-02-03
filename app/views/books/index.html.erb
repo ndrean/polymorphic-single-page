@@ -1,6 +1,7 @@
 <div class="container">
   <div class="row">
   <h1>Ajax rendering, Forms, Nested Polymorphism</h1>
+  <%= flash[:hello] %>
   </div>
 </div>
 
@@ -37,7 +38,7 @@
     <%#= f.submit "Create"%>
   <% #end %>
       
-  <%= render 'authors/new', author: @author  %>
+  <%#= render 'authors/new', author: @author  %>
 <h3> Triple associated 'has_may / belongs_to' nested form to EDIT an author or a book and it's genre</h3>
 </div>
 

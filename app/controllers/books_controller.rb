@@ -18,6 +18,8 @@ class BooksController < ApplicationController
     @users_names = User.order(:name).pluck(:name)
     @list_authors = Author.order(:name).pluck(:name)
     
+    # test
+    flash[:hello] = "hi there"
     # Nested form through association: new author > new book < new genre
     @author = Author.new
     @author.books.build#.genre.build

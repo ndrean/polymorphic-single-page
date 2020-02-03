@@ -19,7 +19,7 @@
         <div class="col-sm-12 col-md-6 border">
             <div class="form-group">
             <br>  
-            <%= simple_form_for @author, url: books_path do |f| %>
+            <%= simple_form_for author, url: authors_path do |f| %>
                 <%= f.input :name %>
                 <br>
                 <%= f.association :country %>

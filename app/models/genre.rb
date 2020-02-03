@@ -4,5 +4,7 @@ class Genre < ApplicationRecord
     # => genre.reviews
     has_many :authors, through: :books
 
+    validates :name, uniqueness: true, presence: true
+    
     accepts_nested_attributes_for :books
 end

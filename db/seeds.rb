@@ -13,15 +13,15 @@ puts 'creating'
 end
 
 a,g =  [],[];
-5.times do
+3.times do
   u = User.create! name: Faker::Name.name
-  c = Country.create!( name: Faker::Nation.flag)
-  a << Author.create!(name: Faker::Book.author, country: c) #Country.find((i..l).to_a.sample)
+  
+  a << Author.create!(name: Faker::Book.author, country: Country.find(rand(Country.first.id..Country.last.id))) #Country.find((i..l).to_a.sample)
   g << Genre.create!( name: Faker::Book.genre)
 end
 
 a.each do |aa|
-  5.times do
+  3.times do
     Book.create! title: Faker::Book.title, author: aa, genre: g.sample
   end
 end 
@@ -42,7 +42,7 @@ arr = []
 end
 
 (u1..u1+un-1).each do |iu|
-  (b1..b1+bn-5).each do |ib|
+  (b1..b1+bn-2).each do |ib|
     # on garde 4 book sans review
     Review.create!(reviewable: Book.find(ib), user:User.find(iu), comment: arr.sample )
   end

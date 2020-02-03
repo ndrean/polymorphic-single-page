@@ -1,7 +1,30 @@
-.body{
-    font-size: 10px;
+.radio-choices {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* if item overflows the line, go to next line*/
+    margin-bottom: 20px;;
 }
 
-.radio_buttons input[type="radio"] {
-    opacity: 0;
+.form-group {
+    padding: 10px 2px;
+}
+.radio-label {
+    flex: 0 0 25%; /* not grow, not shrink, each is 25% of flex-box */
+    background-color: #87ec86;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    opacity: 0.4;
+    font-weight: bold;;
+    &:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+    &.active {
+        opacity: 1;
+    }
+}
+
+.radio-btn-hidden {
+    visibility: hidden;
 }
