@@ -6,49 +6,23 @@
 <%#= f.input :genre_id, as: :radio_buttons,
    wrapper: :custom_collection_inline, collection: @genres %>
 <!-- input_html: { class: "hidden"} -->
-
-
-      <div class="col-xs-8 col-sm-6">
-      <%= ff.simple_fields_for :books, :genre  do |fff| %> 
-          <%= fff.input_field :title, label: 'Book title[0]', placeholder: 'Enter a title' %>
+  
+  <h6>Another one</h6>
+    <%= ff.simple_fields_for :books, :genre  do |f| %> 
+        <%= f.input_field :title, label: 'Book title[0]', placeholder: 'Enter a title' %>
+      <div class="radio-choices">
+        <%= f.input_field :genre_id, as: :radio_buttons,
+            label: "",
+            item_wrapper_class: "radio-label",
+            collection: genres %>
       </div>
+        
+    <% end %>
+  
+      
+      
+      
 
-      <div class="col-xs4 col-sm-6">
-        <%= fff.input :genre_id, as: :radio_buttons, 
-          wrapper: :custom_collection_inline, collection: genres %>
-      </div>
-      <% end %>
-
-      <div class="row border p-2">
-        <div class="radio-choices">
-
-          <div class="row">
-
-            <% genres.each do |genre| %>
-              <div class=" custom-control-inline">
-                  <input class="radio-btn-hidden" type="radio" value="<%= genre.id %>" 
-                    name="author[books_attributes][list][genre_id]"
-                    id="author_books_attributes_0_genre_id_<%= genre.id %>">
-
-                  <label class="radio-label", for="author_books_attributes_0_genre_id_<%= genre.id %>">
-                    <%= genre.name %> 
-                  </label>
-
-                </div>
-            <% end %>
-          </div>
-
-          <div class="row">
-            <div class="form-inline">
-              <%#= simple_form_for genre, url: authors_path, remote: true,
-                    wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
-                <%#= b.input :name, placeholder: "Enter a new genre?", input_html: { class: "ml-3 mt-2 p-2" } %>
-                <%#= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2"  %>
-              <% #end %>
-            </div>
-          </div>
-        </div>
-      </div>
   
 
 

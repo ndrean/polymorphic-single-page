@@ -14,10 +14,23 @@
     and call for the method <em>authors#create</em>.
     </li>
 </ul>
+
 <div class="container">
     <div class="row">
+        <% if @author.errors.any? %>
+            <h5 ><%= pluralize(@author.errors.count, "error") %> prohibited this post from being saved:</h5>
+            <ul>
+                <% @author.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        <% end %>
+    </div>
+
+    <div class="row">
         <div class="col-sm-12 col-md-6 border">
-            <div class="form-group">
+            
+            <h5>Create a new author</h5>
             <!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
             <%= simple_form_for @author, url: authors_path do |f| %>
                 <div class="row">
@@ -29,29 +42,37 @@
                         <%= f.association :country, prompt: "Select a country", label: false %>
                     </div>
                 </div>
-            </div>
+           
         </div>
         <br>
     </div>
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
     <br>
+    
+    <template id = "invisible"> This is invisible </template>
+
     <div class="row">
-        <div class="col-sm-12 col-md-6 border p-2">
-            <div class="col" id="new book">
-                <div class="form-group">
-<!-- if I move the whole .form-group into the partial then I can't use the selection on Genre -->          
-                                      
-                        <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
-                        <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
-                        
-                </div>
-            </div>
+        <div class="col-sm-12 col-md-6 border p-2" id="new book"> 
+            <h5>Create books</h5>                               
+                <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
+                <%#= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %>               
         </div>
     </div>
     <div class="row">
-        <%= f.submit "Create", class:"btn btn-primary"%>
+        <div class="col-sm-12 col-md-6 border p-2 radio-choices"> 
+                <%= f.submit "Create", class:"btn btn-primary"%>
+            <% end %>
+        </div>
+    </div>
+    
+    <div class="row" id="new-genre">
+        <%= simple_form_for @genre, url: authors_path, remote: true,
+                      wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
+          <%= b.input :name, placeholder: "Enter a new genre?", input_html: { class: "ml-3 mt-2 p-2" } %>
+          <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2"  %>
         <% end %>
     </div>
+    
         
         <%#= link_to_add_fields 'Add a book', f, @books %>
         <%#= link_to_add_fields 'Add new book', f, :books %>
