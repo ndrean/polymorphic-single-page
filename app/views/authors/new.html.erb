@@ -26,50 +26,59 @@
             </ul>
         <% end %>
     </div>
-
-    <div class="row">
-        <div class="col-sm-12 col-md-6 border">
-            
-            <h5>Create a new author</h5>
-            <!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
-            <%= simple_form_for @author, url: authors_path do |f| %>
-                <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <%= f.error_notification %>
-                        <%= f.input_field :name, placeholder: "Author's name" %>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <%= f.association :country, prompt: "Select a country", label: false %>
-                    </div>
+    <h5>Create a new author</h5>
+    
+        <!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
+        <%= simple_form_for @author, url: authors_path do |f| %>
+    <div class="row border d-flex flex-row justify-content-between align-items-center">         
+            <%= f.error_notification %>
+                <div class="col-sm-8 col-md-8">
+                    
+                    <%= f.input_field :name, placeholder: "Author's name",
+                        class: "input-author" %>
+                    <!-- avec 'input_field', il faut 'class: ...'-->
                 </div>
-           
-        </div>
-        <br>
+                <div class="col-sm-4 col-md-4">
+                    <%= f.association :country, prompt: "Select a country", label: false, 
+                        input_html: { class: "form-control" } %>
+                </div>
     </div>
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
     <br>
     
     <template id = "invisible"> This is invisible </template>
+    <h5>Create books</h5> 
+    <div class="row" id="new book">
+        <div class="row d-flex border">
+            <%= render partial: 'authors/book_fields', 
+                locals:{ genres: @genres, genre: @genre, ff:f } %> 
+            <br>
+        </div>   
 
-    <div class="row">
-        <div class="col-sm-12 col-md-6 border p-2" id="new book"> 
-            <h5>Create books</h5>                               
-                <%= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
-                <%#= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %>               
-        </div>
+        <div class="row border">
+            <%#= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
+        </div>                              
+        
+        
     </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-6 border p-2 radio-choices"> 
-                <%= f.submit "Create", class:"btn btn-primary"%>
-            <% end %>
-        </div>
+    <div class="row p-2">
+        
+            <%= f.submit "Create", class:"btn btn-primary"%>
+        <% end %>
+        
     </div>
     
-    <div class="row" id="new-genre">
-        <%= simple_form_for @genre, url: authors_path, remote: true,
-                      wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
-          <%= b.input :name, placeholder: "Enter a new genre?", input_html: { class: "ml-3 mt-2 p-2" } %>
-          <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2"  %>
+    <div class="row border" id="new-genre">
+        
+        <%= simple_form_for @genre, url: '/genres', remote: true,
+                wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
+
+            <%= b.input :name, placeholder: "Enter a new genre?",
+                input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
+            <!-- avec '.input', il faut 'input_html: {class:..}' -->
+
+            <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
+        
         <% end %>
     </div>
     

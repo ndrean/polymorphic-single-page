@@ -7,4 +7,5 @@ class Genre < ApplicationRecord
     validates :name, uniqueness: true, presence: true
     
     accepts_nested_attributes_for :books
+
 end

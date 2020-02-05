@@ -1,0 +1,10 @@
+<%= simple_form_for @genre, url: 'genres_path', remote: true,
+                wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
+
+            <%= b.input :name, placeholder: "Enter a new genre?",
+                input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
+            <!-- avec '.input', il faut 'input_html: {class:..}' -->
+
+            <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
+        
+        <% end %>

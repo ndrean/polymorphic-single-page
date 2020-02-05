@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  #get 'genres/new'
+  #get 'authors/genres/create'
   get 'users/new'
   get 'users/create'
   root to: 'books#index'
@@ -17,6 +19,7 @@ Rails.application.routes.draw do
   resources :books, only: [:index, :new, :create]
   resources :authors, only: [:new, :create, :edit, :update]
 
+  resources :genres, only: [:create]
   #get 'authors/new', to: 'authors#new', as: 'new_author' #=> voir RAILS ROUTES
   #post 'authors/create'
   

@@ -8,7 +8,7 @@ User.destroy_all
 
 puts 'creating'
 
-100.times do
+50.times do
   Country.create!(name: Faker::Nation.flag)
 end
 
@@ -17,6 +17,8 @@ a,g =  [],[];
   u = User.create! name: Faker::Name.name
   
   a << Author.create!(name: Faker::Book.author, country: Country.find(rand(Country.first.id..Country.last.id))) #Country.find((i..l).to_a.sample)
+end
+6.times do
   g << Genre.create!( name: Faker::Book.genre)
 end
 
