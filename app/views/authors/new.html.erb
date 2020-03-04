@@ -1,7 +1,7 @@
-<h5 class="text-center">partial <em>authors#_new.html.erb</em> linked with the controller <em>books</em> </h5>
 <%= link_to 'Back', root_path %>
+
 <ul>
-    <li>The view <em>/view/books/index</em> calls for rendering the partial <em>/views/authors/_new</em>.
+    <li>The view <em>/view/books/index</em> calls for the view <em>/views/authors/new</em>.
     The variables that feed this form, <em>@author = Author.new</em> and <em>@author.books.build</em>,
     are thus initialized in the method <em>books#index</em>. 
     </li>
@@ -26,70 +26,61 @@
             </ul>
         <% end %>
     </div>
-    <h5>Create a new author</h5>
-    
-        <!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
-        <%= simple_form_for @author, url: authors_path do |f| %>
-    <div class="row border d-flex flex-row justify-content-between align-items-center">         
-            <%= f.error_notification %>
-                <div class="col-sm-8 col-md-8">
-                    
-                    <%= f.input_field :name, placeholder: "Author's name",
-                        class: "input-author" %>
-                    <!-- avec 'input_field', il faut 'class: ...'-->
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <%= f.association :country, prompt: "Select a country", label: false, 
-                        input_html: { class: "form-control" } %>
-                </div>
-    </div>
-<!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
-    <br>
-    
-    <template id = "invisible"> This is invisible </template>
-    <h5>Create books</h5> 
-    <div class="row" id="new book">
-        <div class="row d-flex border">
-            <%= render partial: 'authors/book_fields', 
-                locals:{ genres: @genres, genre: @genre, ff:f } %> 
-            <br>
-        </div>   
 
-        <div class="row border">
-            <%#= render partial: 'authors/book_fields', locals:{ genres: @genres, genre: @genre, ff:f } %> 
-        </div>                              
+    <div class="row">
+    
+<!-- le 'submit' actionne authors#create <-> authors_path d'ou l'url-->
+        <%= simple_form_for @author, url: authors_path do |f| %>
+            <legend>Create an author</legend>
+        <div class="row border d-flex flex-row justify-content-between align-items-center">         
+            <%= f.error_notification %>
+            <div class="col-sm-8 col-md-8">
+    <!--  '.input_field' removes the div around -->
+                <%= f.input_field :name, placeholder: "Author's name",
+                    class: "input-author" %>
+    <!-- !! with 'input_field', we must use 'class: ...' without 'thml_input-->
+            </div>
+            <div class="col-sm-4 col-md-4">
+                <%= f.association :country, prompt: "Select a country", label: false, 
+                    input_html: { class: "form-control" } %>
+            </div>
+
+        <%# # https://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormTagHelper.html#method-i-hidden_field_tag %>
+                <%= f.input :id, as: :hidden, value: @author.object_id  %>
+        </div>
+<!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
+        <br>
+    
+         
+        <div class="row border pl-2 pr-3" >
+            <p>Create associated books</p>
+            <div class="row d-flex">
+                 
+                <%= f.simple_fields_for(:books, :genre)  do |b| %>   
+                    <%= render 'authors/bookfields', ff:b, genres: @genres %>
+                <% end %>
+                
+            </div>   
+        </div>
+    
+                
+        <div class="row p-2">
+            <%= f.submit "Create author & books", class:"btn btn-primary"%> 
+        </div>
         
-        
-    </div>
-    <div class="row p-2">
-        
-            <%= f.submit "Create", class:"btn btn-primary"%>
         <% end %>
-        
     </div>
     
-    <div class="row border" id="new-genre">
-        
+    <div class="row border p-2" id="new-genre" >
+    <!-- !! with 'form.input', we must use 'input_html: {class:..}' -->
         <%= simple_form_for @genre, url: '/genres', remote: true,
                 wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
 
             <%= b.input :name, placeholder: "Enter a new genre?",
-                input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
-            <!-- avec '.input', il faut 'input_html: {class:..}' -->
+                input_html: { class: "ml-3 mt-2 p-2 input-author", id: "newgenre" } %>
 
             <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
         
         <% end %>
     </div>
-    
-        
-        <%#= link_to_add_fields 'Add a book', f, @books %>
-        <%#= link_to_add_fields 'Add new book', f, :books %>
-        
 </div>
-
-
-
-
-
-

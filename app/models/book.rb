@@ -23,4 +23,6 @@ class Book < ApplicationRecord
   scope :find_by_title, ->(title) {self.where("title ILIKE ?", "%#{title}%").first}
 
   scope :titles, -> { self.pluck(:title)}
+
+
 end

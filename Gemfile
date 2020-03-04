@@ -4,10 +4,17 @@ ruby '2.6.5'
 gem 'bootsnap', require: false
 gem 'jbuilder', '~> 2.0'
 gem 'pg', '~> 0.21'
-gem 'puma'
+
+
+gem "puma", ">= 4.3.3"
+
+
 gem 'rails', '6.0.2.1'
 gem 'redis'
 
+# gem 'nested_form_fields'
+# gem 'jquery-rails'
+gem 'kaminari'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 5.6.1'
 gem 'sassc-rails'
@@ -29,4 +36,5 @@ group :development, :test do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
   gem 'bullet'
+  gem 'rubocop'
 end

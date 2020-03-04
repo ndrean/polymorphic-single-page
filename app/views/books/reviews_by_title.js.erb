@@ -2,7 +2,7 @@ function insertReviewsByTitle() {
   const divReviewsByTitle = document.getElementById('ajax_review_by_title');
   divReviewsByTitle.innerHTML = "";
   divReviewsByTitle.insertAdjacentHTML('beforeend',
-   '<%= j render "books/get_reviews_by_title", title: @title, reviews_title: @reviews_title %>')
+   '<%= j render "books/find_reviews_by_title", title: @title, reviews_title: @reviews_title %>')
 };
 
 insertReviewsByTitle();

@@ -5,10 +5,11 @@ Rails.application.routes.draw do
   get 'users/new'
   get 'users/create'
   root to: 'books#index'
+  get 'authors/create_new_book'
   
-  get 'get_reviews_by_title', to: 'books#get_reviews_by_title', as: 'get_reviews_by_title'
-  get 'get_reviews_by_user', to: 'books#get_reviews_by_user', as: 'get_reviews_by_user'
-  get 'get_books_by_author', to: 'books#get_books_by_author', as: 'get_books_by_author'
+  get 'books/reviews_by_title'
+  get 'books/reviews_by_user'
+  get 'books/books_by_author'
   
   get 'books/display_json'
   get 'books_ajax', to: 'books#books_ajax', as: 'books_ajax' 

@@ -1,6 +1,6 @@
 class GenresController < ApplicationController
   
-
+# https://sipsandbits.com/2018/10/11/building-complex-forms-with-rails/
   def create
     @genre = Genre.new(genres_params)
     if @genre.save
@@ -10,6 +10,8 @@ class GenresController < ApplicationController
     end
     
   end
+
+private
 
   def genres_params
     params.require(:genre).permit(:name)

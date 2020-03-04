@@ -1,16 +1,21 @@
-genreInput = document.getElementById('genre_name');
-target = document.querySelector('.radio-choices');
-//console.log("ICI");
+
+if (document.getElementById('new-genre')) {
+    // const genreId = parseInt(document.activeElement.id.match(/(\d+)/g)[0]);
+    target = document.querySelector('.radio-choices');
+    
+    // essai de mettre l'input à la fin de tous les genres
+    targets = document.querySelectorAll('.radio-choices input[type="hidden"');
+    Array.from(targets).forEach((currentValue) => {
+        console.log(currentValue.name)
+    })
+    // fin essai
+    
+    target.insertAdjacentHTML('beforeend', '<%= j render "genres/formgenre", genre: @genre %> ');
+    document.getElementById('new_genre').reset()
+    };
 
 
-
-console.log("<%=@genre.name%>")
-//console.log("<%=@genre.id%>")
-
-target.insertAdjacentHTML('beforeend', '<%= j render "genres/formgenre", genre: @genre %> ');
-
-genreInput.value = "";
-
-document.addEventListener('click', () => {
-    console.log(document.activeElement); //.nextElementSibling);
-});
+    
+    // document.addEventListener('click', () => {
+    //     console.log(document.activeElement); //.nextElementSibling);
+    // })

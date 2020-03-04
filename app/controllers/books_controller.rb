@@ -4,12 +4,10 @@ class BooksController < ApplicationController
     
     @books = Book.includes( {author: :country}, :genre ) #{reviews: :user},
     @users = User.includes(reviews: :reviewable)
-    
-    # => since user => books declared with "through: :reviews"
-    #@usersb = User.includes({books: {author: :country}})
 
     @authors = Author.includes(:books, :country)
 
+    # scope declared in model 'Book'
     @unreviewed_books = Book.unreviewed
     @reviewed_books = Book.reviewed
 
@@ -18,8 +16,6 @@ class BooksController < ApplicationController
     @users_names = User.order(:name).pluck(:name)
     @list_authors = Author.order(:name).pluck(:name)
     
-    # test
-    flash[:hello] = "hi there"
     # Nested form through association: new author > new book < new genre
     @author = Author.new
     @author.books.build#.genre.build
@@ -28,73 +24,39 @@ class BooksController < ApplicationController
     @genre = Genre.new
   end
 
-  def get_reviews_by_title
-
-    query = params[:search]
-    @title = params[:search][:input_title]
-    if query.present? && !@title.empty?
-      @reviews_title = []
-      @title[1..-1].each do |t|
-        @reviews_title += Book.includes(reviews: :user).find_by_title(t).reviews
-      end
-    end
-
+  def reviews_by_title
+    # method 'find_reviews_by_title' defined in model 'Review' with 'self'
+    @reviews_title = Review.find_reviews_by_title(params[:search])
     respond_to do |format|
       format.js
     end
-
   end
 
-
-  def get_books_by_author
-
-    if params[:search].present? && !params[:search][:input_name].empty?
-      author_name = params[:search][:input_name]
-      @author_books = []
-      
-      author_name[1..-1].each do |a|
-        @author_books << Author.includes(:books).find_by(name: a)
-      end
+  def reviews_by_user
+    # method 'find_reviews_by_title' defined in model 'Review' with 'self'
+    
+    @user_reviews = Review.find_reviews_by_user(params[:search])
+    
+    if @user_reviews.class == Array
+      @user_reviews = Kaminari.paginate_array(@user_reviews).page(params[:page]).per(5)
     end
-
     respond_to do |format|
       format.js
     end
-
-  end
-
-
-  def get_reviews_by_user
-
-    user_names = params[:search][:user_name]
-    if params[:search].present? && !user_names.empty?
-      user_names = user_names[1..-1]
-      @user_reviews = []
-      user_names.each do |u|
-        @user_reviews += User.includes( reviews: [ reviewable: [{ author: :country }, :country ]])
-          .find_by(name: u).reviews
-      end
-    end
-
-    respond_to do |format|
-      format.js
-    end
-
   end
   
-# if we make the HTTP request 'url = .../books/books_all' (or an alias depending upon root),
- # this will trigger the action 'books_all' in the controller 'books', since this association
-  # is declared in 'routes.rb'
+  def books_by_author
+    # method 'find_author_books' defined in model 'Author' with 'self'
+    @author_books = Author.find_author_books(params[:search])
+    respond_to do |format|
+      format.js
+    end
+  end
 
   def display_json
     @books = Book.includes(:author, :genre)
     render json: @books.to_json(include:  {author: {only: :name}, genre: {only: :name}})
-    
-    # => this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
-
-    # if we declare a partial 'books/_reviews_all.html.erb', se can use it with:
-    #render partial: 'books/books_all', locals: {books: Book.all} 
-    #and this partial uses locally the variable 'books'
+    # this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
   end
 
   def books_ajax
@@ -120,27 +82,20 @@ class BooksController < ApplicationController
     end
   end
 
-  def get_form_ajax2
-      # call by 'form_with'
-      @input = params[:input]
-      respond_to do |format|
-        format.js
-      end
+
+  def new
+    @book = Book.new
   end
 
-  # def new
-  #   @book = Book.new
-  # end
-
-  # def create
-  #   @book  = Book.new(book_params)
-  #   if @book.save
-  #     redirect_to root_path
-  #   else
-  #     flash[:error] = "a bug."
-  #     render :new
-  #   end
-  # end
+  def create
+    @book  = Book.new(book_params)
+    if @book.save
+      redirect_to root_path
+    else
+      flash[:error] = "a bug."
+      render :new
+    end
+  end
 
   # def edit
   # end
@@ -154,17 +109,18 @@ class BooksController < ApplicationController
 
 
   def create
-  
     #Genre.destroy(Genre.last.id)
-    @author = Author.new(author_params)
-    #@genre = Genre.find(author_params)
-    if @author.save
-      flash[:success] = "ok"
-      redirect_to root_path
-    else
-      flash[:error] = "a bug."
-      redirect_to new_book_path
-    end
+    #@author = Author.find(author_params)
+    
+    # binding.pry
+    # #@genre = Genre.find(author_params)
+    # if @author.save
+    #   flash[:success] = "ok"
+    #   redirect_to root_path
+    # else
+    #   flash[:error] = "a bug."
+    #   redirect_to new_book_path
+    # end
   end
 
   def author_params
@@ -174,6 +130,5 @@ class BooksController < ApplicationController
     # Ok pour version radio
     params.require(:author).permit(:name,  :country_id, :genre,
         books_attributes:  [:title, :genre_id, '_destroy'])
- 
   end
 end

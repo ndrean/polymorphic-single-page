@@ -1,5 +1,5 @@
 document.addEventListener('click', () => {
-    console.log(document.activeElement); //.nextElementSibling);
+    console.log(document.activeElement.id); //.nextElementSibling);
 });
 
 // if (genresList.length>0) {    

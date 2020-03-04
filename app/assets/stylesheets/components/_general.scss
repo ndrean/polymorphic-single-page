@@ -27,7 +27,8 @@
     }
     
     & input {
-        opacity: 1;
+        opacity: 0;
+        /* rendre invisible le radio button */
     }
     
     & input[type="radio"]:checked + label {
@@ -49,3 +50,7 @@
 }
 /* https://css-tricks.com/the-checkbox-hack/ */
 /* https://css-tricks.com/almanac/selectors/c/checked/ */
+
+.link-new-book {
+    color: red;
+}

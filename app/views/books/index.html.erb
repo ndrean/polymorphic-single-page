@@ -9,17 +9,25 @@
 
 <div class="container">
 <div class="row">
-<h3> <a href="#create"> Create/Edit an author, book, review</a></h3>
+<h3> <a href="#create"> As a user/admin, I can create/Edit an author, then a book and it's genre</a></h3>
 </div>
+<div class="row">
+<h3> <a href="#"> As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
+</a></h3>
+</div>
+<div class="row">
+<h3> <a href="#"> As a user, I can create reviews associated to an author or a book, or a movie</a></h3>
+</div>
+
 <div class="row">
   <h3><a href="#cookie"> Form with no model in single page with a cookie</a>  </h3>
   </div>
   <div class="row">
-  <h3><a href="#3-rendering"> Three rendering methods</a>  </h3>
+  <h3><a href="#2-rendering"> Two rendering methods</a>  </h3>
   </div>
 
   <div class="row">
-    <h3><a href="#search"> Ajax form single page search </a></h3>
+    <h3><a href="#search"> Multi-select search Ajax rendered by pagination( Todo) </a></h3>
   </div>
 
   <div class="row">
@@ -28,24 +36,18 @@
 
 </div>
 <div class="container" id="create">
-  <h3> Triple associated 'has_may / belongs_to' nested form to CREATE an author, his books and set it's genre</h3>
+  <h3> Triple associated 'has_may / belongs_to' nested form to CREATE an author, his books and set/create it's genre</h3>
 
   <%= link_to 'Create Author / Book', new_author_path %>
 
-  <%#= simple_form_for @author, url: new_book_path do |f| %>
-    <%#= f.input :name %>
-    <%#= f.association :country %>    
-    <%#= f.submit "Create"%>
-  <% #end %>
       
-  <%#= render 'authors/new', author: @author  %>
 <h3> Triple associated 'has_may / belongs_to' nested form to EDIT an author or a book and it's genre</h3>
 </div>
 
 <div class="container" id="cookie"> 
 <h3>Form with no model in single page</h3>
-  <h5>Submitting a form with no model in this single page via a cookie (no JS)</h5>
-  <p>The input of this form will be transmitted to this page via a cookie. This form is 'POST' by default, and controlled by a method
+  <p> To submit a form with no model, we use a symbol. Submitting a form with no model in this single page via a cookie (no JS).
+  The input of this form will be transmitted to this page via a cookie. This form is 'POST' by default, and controlled by a method
    'books#get_form' with a 'POST' route.
   The controller method saves the params in a cookie, just declared by naming it, for example 'cookies[:form]' here.
    Then the method 'redirect_to' this same page. There is a partial '_form.html.erb' bellow waiting for an input: %= render 'books/form'  % . Once submitted, the input appears bellow. 
@@ -60,42 +62,46 @@
   Result: <h6> <%= render 'books/form'  %></h6>
   <% cookies.delete :form %>
   <br>
-  <h5>Submitting a form in this single page via AJAX.</h5>
+  <h5>Submitting a form in this single page via AJAX and clipboard. </h5>
+  <p> We declare the form  'remote:true' and link it to a method named by 'url' in the controler. 
+  By default, it is 'POST'. We then ask the method in the controler to respond by Javascript, written in a 'js.erb' file with the same name. It will call a Javascript function that will render an HTML
+   string into the HTML attribute of a DOM element.
+  We also have an example full Javascript by using the clipboard to copy the input by clicking the button
+  and rendering it. </p>
   <div class="row">
-    <div class="col">
-    <%= simple_form_for :search, url: get_form_ajax_path, remote: true do |f| %>   
-    <%= f.input_field :input, id:"input1" %> <!-- .input_field to put aligned -->
-    <%= f.submit "Simple_form remote / AJAX", class:"btn btn-primary"%>
 
+    <div class="col">
+      <%= simple_form_for :search, url: 'books/get_form_ajax', remote: true do |f| %>   
+        <%= f.input_field :input, id:"input1", placeholder:"type n click"%> <!-- .input_field to display aligned -->
+        <%= f.submit "Simple_form remote / AJAX", class:"btn btn-primary"%>
+      <% end %>
+    </div>
     <!-- Note: for a custom button, we do: -->
-    <!--  <%= f.button :submit, 'Search!' do %> -->
+    <!--  <%#= f.button :submit, 'Search!' do %> -->
     <!--            my custom button text           -->
-    <!--      <% end %>                             -->
-    
-  <% end %>
-    </div>
-    <div class="col">
-    <%= form_with url:'/get_form_ajax2' do |f| %>
-    <%= f.text_field :input, id:"input2" %>
-    <%= f.submit "'book/form_with'", class:"btn btn-primary"%>
-  <% end %>
-    </div>
-  </div>
+    <!--  <%# end %>                             -->
   
-  <p>We specify the url to fetch the 'POST' method, and since we use 'remote:true' 
-  with 'simple_form_for', and nothing with 'form_with' (it's remote: ture by default).
-  It will call a Javascript function that will render an HTML
-   string into the HTML attribute of a DOM element.</p>
+    <div class="col">
+    <!-- do not use 'form'. Used the Javascript function 'copyClipboard.js' -->
+      <input id="to-copy" type="text" style= "border: 1px solid grey"
+        placeholder = "type n click to copy/paste">
+      <button id="do-copy" class="btn btn-primary">Copy from clipboard</button>
+    </div>
 
-  Result: <h6 id="ajax-form"></h6>
+  </div>
+  <hr>
+    <p>Result: <span id="ajax-form" > </span></p>
+    <!-- no need of 'contenteditable: true' -->
+  <hr>
+  
 </div>
 
-<div class="row" id='3-rendering'>
+<div class="row" id='2-rendering'>
   <div class="container">
-    <h4>Three rendering methods: partials within a page, link_to another page, AJAX display in the page via a link</h4>
+    <h4>Two rendering methods: partials within a page, link_to another page, AJAX display in the page via a link</h4>
     <div class="row">
       
-      <div class="col">
+      <div class="col-xs-12 col-md-6">
         <p>The HTTP request 'url = /books/index' displays the file '../views/index.html.erb' and the needed data is served by the
         controller/method  'books#index'. This column contains a 'render' declaration to display the partial 'views/_books_all.html.erb'.
          The data is furnished by the method 'books#index' so this column is loaded-displayed every time the index page is loaded.
@@ -112,19 +118,9 @@
           <%#= render partial: 'books/books_all',  locals: {books: @books} %>
         </div>
 
-      <div class="col">
-        <p> The link bellow makes a HTTP request 'url= ../books_all' to display the file  '/views/books_all', which in served by the method 'books#books_all' for the data. </p>
-        <p>% link_to 'View books in another page', books_all_path % </p>
-        <p>This is a link to a new page. We pass directly the instance '@books' to the view which uses '@books'. This is different from partials, which use a local variable,
-         'books: @books'.</p>
-        <p> The same info is displayed, but through the copy of the partial without the _underscore, ie 'books/reviews_all.html.erb'. 
-        This time, the data is furnished by the method books#reviews_all' which 'lazy' renders '../books/books_all.html' with Rails naming association convention. </p>
+      
 
-        <p><%= link_to "View 'books.json' in another page", books_display_json_path, class:'btn btn-primary' %> </p>
-        <p> "render json: @books"</p>
-      </div>
-
-      <div class="col">
+      <div class="col-xs-12 col-md-6">
         <p>AJAX rendering on same page. The link:</p>
         <p>%= link_to 'All books with AJAX', books_ajax_path, remote: true %</p>
         calls the method 'books#books_ajax' which will respond with corresponding Javascript file '../views/books_all_ajax.js.erb', which will display the same partial
@@ -153,6 +149,7 @@
     <%= render 'books/reviewed_unreviewed', books: @unreviewed_books %>
 
   </div>
+  <hr>
   <div class="row">
 
     <h3>Commented books: using a scope and simply joins</h3>
@@ -160,6 +157,7 @@
     <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
     
   </div>
+  <hr>
 </div>
 
 
@@ -184,54 +182,59 @@
 <!-- with 'multiple: true', we have a drop-down selection form -->
 
 <div class='container' id='search'>
-<h3>Search forms are AJAX rendered</h3>
+<h3>Search forms AJAX rendered</h3>
+
   <div class="row">
-    <div class='col'>
-      <div>
-        <h5>Reviews on books</h5>
-        <p>(search by title)</p>
-        <%= simple_form_for :search, url: get_reviews_by_title_path, remote: true, method: "GET" do |f| %>   
-          <%= f.input_field :input_title, collection: @titles, multiple: true %>
-          <%= f.submit "Search", class:"btn btn-primary"%>
-        <% end %>
-      </div>
-      
+
+    <div class="col">
+      <h5>Reviews on books</h5>
+      <p>(search by title)</p>
+      <%= simple_form_for :search, url: 'books/reviews_by_title', remote: true, method: "GET" do |f| %>   
+        <%= f.input_field :input_title, collection: @titles, multiple: true %>
+        <%= f.submit "Search", class:"btn btn-primary"%>
+      <% end %> 
+
       <div id="ajax_review_by_title"> <!-- JS injection here --> </div>
+     </div>
+
+    <div class="col"> 
+      <h5>Books by author</h5>
+      <%= simple_form_for :search, url: 'books/books_by_author', remote: true, method: "GET" do |f| %>   
+          <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
+          <%= f.button :submit, "Search", class:"btn-primary" %>
+      <% end %>
+
+      <div class='row' id="ajax_books_by_author"> </div>
     </div>
-
-
-    <div class='col'>
-      <div>
-        <h5>Books by author</h5>
-        <%= simple_form_for :search, url: get_books_by_author_path, remote: true, method: "GET" do |f| %>   
-            <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
-            <%= f.button :submit, "Search", class:"btn-primary" %>
-        <% end %>
-      </div>
-      
-      <div id="ajax_books_by_author"> </div>
-    </div>
-
-
-    <div class='col'>
-      <div>
-        <h5>Comments from the users</h5>
-        <p>(usage of "reviewable")</p>
-        <%= simple_form_for :search, url: get_reviews_by_user_path, remote: true, method: "GET" do |f| %>   
-          <%= f.input_field :user_name, collection: @users_names, multiple: true %>
-          <%= f.submit "Search", class:"btn btn-primary" %>
-        <% end %>
-      </div>
-
-      <div id="ajax_reviews_by_user">
-        <% if false && @name == nil %>
-          <h3>All comments by users: usage of "reviewable"</h3>
-          <%= render 'books/users_reviews', users: @users %>
-        <% end %>
-      </div>
-
+  </div>
+<hr>
+  <div class="row">
+    <h5>Comments from the users</h5>
+    <p>(usage of "reviewable")</p>
+    <%= simple_form_for :search, url: 'books/reviews_by_user', remote: true, method: "GET" do |f| %>   
+      <%= f.input_field :user_name, collection: @users_names, multiple: true %>
+      <%= f.submit "Search", class:"btn btn-primary" %>
+    <% end %>
+  
+    <div id="ajax_reviews_by_user">
+      <% if false && @name == nil %>
+        <h3>All comments by users: usage of "reviewable"</h3>
+        <%= render 'books/users_reviews', users: @users %>
+      <% end %>
     </div>
   </div>
 </div>
+<hr>
+<div class="container" id="API-JSON">
+  <div class="col">
+      <p> The link bellow makes a HTTP request 'url= ../books_all' to display the file  '/views/books_all', which in served by the method 'books#books_all' for the data. </p>
+      <p>% link_to 'View books in another page', books_all_path % </p>
+      <p>This is a link to a new page. We pass directly the instance '@books' to the view which uses '@books'. This is different from partials, which use a local variable,
+      'books: @books'.</p>
+      <p> The same info is displayed, but through the copy of the partial without the _underscore, ie 'books/reviews_all.html.erb'. 
+      This time, the data is furnished by the method books#reviews_all' which 'lazy' renders '../books/books_all.html' with Rails naming association convention. </p>
 
-<div class="container" id="API-JSON"></div>
+      <p><%= link_to "View 'books.json' in another page", books_display_json_path, class:'btn btn-primary' %> </p>
+      <p> "render json: @books"</p>
+  </div>
+</div>
