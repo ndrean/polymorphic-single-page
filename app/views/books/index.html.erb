@@ -20,10 +20,10 @@
 </div>
 
 <div class="row">
-  <h3><a href="#cookie"> Form with no model in single page with a cookie</a>  </h3>
+  <h3><a href="#cookie"> Displaying form input (no model or Active Record object) within the same page</a>  </h3>
   </div>
   <div class="row">
-  <h3><a href="#2-rendering"> Two rendering methods</a>  </h3>
+  <h3><a href="#2-rendering"> Rendering form with page</a>  </h3>
   </div>
 
   <div class="row">
@@ -43,103 +43,125 @@
       
 <h3> Triple associated 'has_may / belongs_to' nested form to EDIT an author or a book and it's genre</h3>
 </div>
-
+<hr>
 <div class="container" id="cookie"> 
-<h3>Form with no model in single page</h3>
-  <p> To submit a form with no model, we use a symbol. Submitting a form with no model in this single page via a cookie (no JS).
-  The input of this form will be transmitted to this page via a cookie. This form is 'POST' by default, and controlled by a method
-   'books#get_form' with a 'POST' route.
-  The controller method saves the params in a cookie, just declared by naming it, for example 'cookies[:form]' here.
-   Then the method 'redirect_to' this same page. There is a partial '_form.html.erb' bellow waiting for an input: %= render 'books/form'  % . Once submitted, the input appears bellow. 
+<h3>Form with no model rerendered in the page</h3>
+  <p> To submit a form with no model, we use a symbol <strong>simple_form_for :search</strong>. Forms are 'POST' by default,
+  and we specifiy the action via <strong>controller#method</strong>
+  </p>
+
+  <h5>Submitting a form via cookie (with page refresh)</h5>
+  The input of this form will be transmitted to this page via a cookie. A cookie is declared by naming it,
+  for example <strong>cookies[:form]</strong>. The controller method saves the params in a cookie. Then the method calls 'redirect_to' this same page. There is a partial '_form.html.erb' bellow waiting for an input: %= render 'books/form'  % . Once submitted, the input appears bellow. 
   We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
-  a page refresh will reset the partial (this is the case here).</p>
-
-  <%= simple_form_for( :search, url: get_form_path) do |f| %>   
-    <%= f.input_field :input %>
-    <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
-  <% end %>
-
-  Result: <h6> <%= render 'books/form'  %></h6>
-  <% cookies.delete :form %>
-  <br>
-  <h5>Submitting a form in this single page via AJAX and clipboard. </h5>
-  <p> We declare the form  'remote:true' and link it to a method named by 'url' in the controler. 
-  By default, it is 'POST'. We then ask the method in the controler to respond by Javascript, written in a 'js.erb' file with the same name. It will call a Javascript function that will render an HTML
-   string into the HTML attribute of a DOM element.
-  We also have an example full Javascript by using the clipboard to copy the input by clicking the button
-  and rendering it. </p>
+  a page refresh will reset the partial (this is the case here).
   <div class="row">
-
     <div class="col">
-      <%= simple_form_for :search, url: 'books/get_form_ajax', remote: true do |f| %>   
-        <%= f.input_field :input, id:"input1", placeholder:"type n click"%> <!-- .input_field to display aligned -->
-        <%= f.submit "Simple_form remote / AJAX", class:"btn btn-primary"%>
+    <%= simple_form_for( :search, url: get_form_path) do |f| %>   
+      <%= f.input_field :input %>
+      <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
+    <% end %>
+    </div>
+    <div class="col">
+      Result: <h6> <%= render 'books/form'  %></h6>
+      <% cookies.delete :form %>
+    </div>
+  </div>
+  
+  <br>
+  <h5>Submitting a form via AJAX</h5>
+  <p> This form has no model so we use a symbol <strong>:search</strong> to the form helper
+  <strong>simple_form_for </strong>. The form is AJAX submitted with <strong>remote: true</strong>.
+  The method is specified by <strong>url: "controller/method_name"</strong>. It captures the input
+  with <strong>params[:search]</strong>. By default, it is <strong>POST</strong>.
+  In the controler, we ask the method to <strong>respond_to format.js</strong>: it will call
+  the file <strong>method_name.js.erb</strong> written in a 'js.erb'. The method will pass the data 
+  to the .js.erb file. It will call a Javascript function that will render an HTML string into the HTML attribute of a DOM element.
+  </p>
+  
+  <div class="row">
+    <div class="col">
+      <%= simple_form_for(:search, method: :post, url: 'books/get_form_ajax', remote: true) do |f| %>   
+        <%= f.input_field :input, id:"input1", placeholder:"Type n Click"%>
+         <!-- usage of .input_field to display aligned -->
+        <%= f.button :submit, "Simple_form / AJAX", class:"btn btn-primary"%>
       <% end %>
     </div>
+    <div class="col">
+      <p>Result: <span id="ajax-form" > </span></p>
+    </div>
+  </div>
+      
     <!-- Note: for a custom button, we do: -->
     <!--  <%#= f.button :submit, 'Search!' do %> -->
     <!--            my custom button text           -->
     <!--  <%# end %>                             -->
-  
+    <hr>
+    <h5>Submitting a form with clipboard. </h5>
+  <p>Example full Javascript by using the clipboard. Solution with both <strong>document.exeCommand</strong>'' or the <strong>Clipboard API</strong> (this last one is active here).</p>
+  <div class="row">
     <div class="col">
     <!-- do not use 'form'. Used the Javascript function 'copyClipboard.js' -->
       <input id="to-copy" type="text" style= "border: 1px solid grey"
         placeholder = "type n click to copy/paste">
-      <button id="do-copy" class="btn btn-primary">Copy from clipboard</button>
+      <button id="copy-btn" class="btn btn-primary">Copy to clipboard</button>
+     
     </div>
-
+    
+    <div class="col">
+      <p>Result is pasted here: <span id = 'clipboard'></span></p>
+    </div>
+    <br>
   </div>
   <hr>
-    <p>Result: <span id="ajax-form" > </span></p>
-    <!-- no need of 'contenteditable: true' -->
-  <hr>
-  
 </div>
 
 <div class="row" id='2-rendering'>
   <div class="container">
-    <h4>Two rendering methods: partials within a page, link_to another page, AJAX display in the page via a link</h4>
-    <div class="row">
-      
-      <div class="col-xs-12 col-md-6">
-        <p>The HTTP request 'url = /books/index' displays the file '../views/index.html.erb' and the needed data is served by the
-        controller/method  'books#index'. This column contains a 'render' declaration to display the partial 'views/_books_all.html.erb'.
-         The data is furnished by the method 'books#index' so this column is loaded-displayed every time the index page is loaded.
-          We precise how the variables furnished by the controller are passed to partials in this way :</p>
-        <p> % render partial: 'books/books_all',  locals: {books: @books} %</p>
-        <p> When clicking on the 'return' link, this reloads the whole page. Since the stars bellow are randomly
-        set, they will change at each reload.</p>
-        <p> The button bellow just toggles a CSS class '.not-active { display:none; }' to ON/OFF via Javascript function 'classListToggle('not-active').</p>
+    <h4>Rendering partial within a page with AJAX </h4>
+    </p> The link <strong>'View all books with AJAX' <=> < '%=' link_to "View All books with AJAX", "books/books_ajax", remote: true '%'></strong>
+    calls the method (controller#method) <strong>books#books_ajax</strong>. We specified <strong>remote: true</strong>,
+    so that we will have an AJAX call, and we have to add in the controller's method the following lines:
+    <ul>
+      respond_to do |format| <br>format.js <br>end
+    </ul>
+    so that this method calls the corresponding Javascript file <strong>books_ajax.js.erb</strong>.
+    The controller's method furnishes the data (here <strong>@books</strong> and pass them to the JS function which renders
+    (within a partial at a designed location):
+    <ul>
+      const divBooks = document.getElementById('books-all-ajax'); <br>
+      divBooks.innerHTML = ""; <br>
+      divBooks.insertAdjacentHTML( <br>
+        "beforeend", <br>
+      "<'%'= j render "books/books_all", books: @books, cached: true %>") <br>
+      }; 
+    </ul> 
+    When clicking 'View all books with AJAX', since the stars are build randomly within the partial, 
+    they will change but there is no page reload.
+    <ul>
+      <'%' (0..5).to_a.sample.times do  %> <br>
+      <'i class="far fa-star" '><'/i>' <br>
+      <'%' end %>
+    </ul>
+    </p>
 
-        <button class="btn btn-primary" id="hideBtn"> Hide / Show bellow all books </button>
-        <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
-        <div id="hideMe" > <!-- class="not-active" -->
-          <%= render 'books/books_all', books: @books, cached: true %></div>
-          <%#= render partial: 'books/books_all',  locals: {books: @books} %>
-        </div>
-
-      
-
-      <div class="col-xs-12 col-md-6">
-        <p>AJAX rendering on same page. The link:</p>
-        <p>%= link_to 'All books with AJAX', books_ajax_path, remote: true %</p>
-        calls the method 'books#books_ajax' which will respond with corresponding Javascript file '../views/books_all_ajax.js.erb', which will display the same partial
-         'views/_books_all.html.erb'. The controller's method furnishes the data, and the JS function will ask to render the partial at a desingned location, given by setting
-         an id to a div for example. There is no page reload this time because the stars in the first column won't change (random). 
-         When clicking 'All reviews', the stars within this column will change but not the first column. When clcking 'return', this will reload the page, 
-        so the stars in the first column will change and te data bellow too, since this returns to the initial state.</p>
-
-        <p><%= link_to 'View all books with AJAX', books_ajax_path, remote: true, class:'btn btn-primary' %></p>
-
-        <div id = "ajax-books-all"></div>  
-
-      </div>
+    <p> A toggle button display/hide is added and triggers a listening Javascript function <strong>toggleDiv.js</strong>. On clic, it sets  
+    <strong>toggleAttribute('hidden')</strong> on the div container of the response (alternatively, we can add/remove
+     <strong>classList.toggle('active')</strong> to this container div where 'active' is the CSS class <strong>.active {display: none;}</strong>.
+    </p>
+    <p>
+      <%= link_to 'View all books with AJAX', "books/books_ajax", remote: true, class:'btn btn-primary' %>
+      <button class="btn btn-primary" id="hideBtn"> Hide / Show results </button>
+    </p>
+    <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
+    <div id="hideMe" > <!-- class="not-active" -->
+      <div id = "books-all-ajax"></div>  
     </div>
   </div>   
 </div>
      
 
-
+<hr>
 <p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
  We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
 <div class="container">
@@ -181,37 +203,52 @@
 
 <!-- with 'multiple: true', we have a drop-down selection form -->
 
+<hr>
 <div class='container' id='search'>
-<h3>Search forms AJAX rendered</h3>
+<h3>Multiple search forms AJAX rendered</h3>
 
-  <div class="row">
-
+<h5>Reviews on books (search by title)</h5>
+  <div class="row">    
     <div class="col">
-      <h5>Reviews on books</h5>
-      <p>(search by title)</p>
-      <%= simple_form_for :search, url: 'books/reviews_by_title', remote: true, method: "GET" do |f| %>   
-        <%= f.input_field :input_title, collection: @titles, multiple: true %>
-        <%= f.submit "Search", class:"btn btn-primary"%>
-      <% end %> 
-
-      <div id="ajax_review_by_title"> <!-- JS injection here --> </div>
-     </div>
-
-    <div class="col"> 
-      <h5>Books by author</h5>
-      <%= simple_form_for :search, url: 'books/books_by_author', remote: true, method: "GET" do |f| %>   
-          <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
-          <%= f.button :submit, "Search", class:"btn-primary" %>
+      <%= simple_form_for :search,
+        url: 'books/reviews_by_title',
+        remote: true,
+        method: "GET" do |f| %>   
+        <%= f.button :submit, "Search", class:"btn btn-primary"%>
+        <%= f.input_field :input_title, collection: @titles, multiple: true %>   
       <% end %>
+    </div>
+    <div class="col">
+      <div id="ajax_review_by_title"> <!-- JS injection here --> </div>
+    </div>  
+  </div>
 
+  <hr>
+  <h5>Books by author</h5>
+  <div class="row">
+    <div class="col">
+      <%= simple_form_for :search,
+        url: 'books/books_by_author',
+        wrapper: :inline_form,
+        remote: true,
+        method: "GET" do |f| %>   
+        <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
+        <%= f.button :submit, "Search", class:"btn-primary" %>
+      <% end %>
+    </div>
+    <div class="col">
       <div class='row' id="ajax_books_by_author"> </div>
     </div>
   </div>
-<hr>
-  <div class="row">
-    <h5>Comments from the users</h5>
-    <p>(usage of "reviewable")</p>
-    <%= simple_form_for :search, url: 'books/reviews_by_user', remote: true, method: "GET" do |f| %>   
+  <hr>
+  <h5>Comments from the users (usage of "reviewable")</h5>
+  <div class="row">  
+    <%= simple_form_for :search,
+      url: 'books/reviews_by_user',
+      remote: true,
+      wrapper: :inline_form,
+      html: { class: "form-inline" },
+      method: "GET" do |f| %>   
       <%= f.input_field :user_name, collection: @users_names, multiple: true %>
       <%= f.submit "Search", class:"btn btn-primary" %>
     <% end %>

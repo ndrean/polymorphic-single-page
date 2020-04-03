@@ -19,6 +19,7 @@ class BooksController < ApplicationController
     # Nested form through association: new author > new book < new genre
     @author = Author.new
     @author.books.build#.genre.build
+    
     #@new_genre = Genre.create!(name: "Click to add new genre")
     @genres =  Genre.all
     @genre = Genre.new
@@ -34,7 +35,6 @@ class BooksController < ApplicationController
 
   def reviews_by_user
     # method 'find_reviews_by_title' defined in model 'Review' with 'self'
-    
     @user_reviews = Review.find_reviews_by_user(params[:search])
     
     if @user_reviews.class == Array
@@ -76,6 +76,7 @@ class BooksController < ApplicationController
   def get_form_ajax
     if params[:search].present?
       @input = params[:search][:input]
+      logger.debug ".............................#{@input}"
       respond_to do |format|
         format.js
       end

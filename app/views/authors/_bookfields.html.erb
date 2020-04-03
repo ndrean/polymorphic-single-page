@@ -3,8 +3,7 @@
    wrapper: :custom_collection_inline, collection: @genres %>
 <!-- input_html: { class: "hidden"} -->
   
-<div id='new_book"'>
-
+<div>
   <div class="col-sm-8 align-items-center p-3">
     <%= ff.input_field :title,  class: "input-author", placeholder: 'Enter a title'%>
   </div>
@@ -19,7 +18,7 @@
     <%= ff.input :id, as: :hidden, value: @author.books.object_id %>
     <%= ff.input_field :_destroy, as: :hidden %> 
     <%#= since we don't want to show see the check %> 
-    <%= link_to 'Delete', '#', class: 'btn' %>
+    <%= link_to 'DeletE', '#', class: 'btn' %>
 
     <!-- <div class="col-sm-4 align-items-center p-3"> -->
       <!-- <a href="#newgenre">Create new genre</a> -->

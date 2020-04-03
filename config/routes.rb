@@ -12,9 +12,10 @@ Rails.application.routes.draw do
   get 'books/books_by_author'
   
   get 'books/display_json'
-  get 'books_ajax', to: 'books#books_ajax', as: 'books_ajax' 
-  post 'get_form', to: 'books#get_form', as: 'get_form'
-  post 'get_form_ajax', to: 'books#get_form_ajax', as: 'get_form_ajax'
+  #get "books/books_ajax"
+  post 'books/books_ajax'
+  post 'get_form', to: 'books#get_form'
+  post 'books/get_form_ajax'
   post 'get_form_ajax2', to: 'books#get_form_ajax2', as: 'get_form_ajax2'
 
   resources :books, only: [:index, :new, :create]

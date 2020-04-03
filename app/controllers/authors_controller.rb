@@ -1,24 +1,26 @@
 class AuthorsController < ApplicationController
-  def local_binding
-    binding
-  end
+  # def local_binding
+  #   binding
+  # end
 
   def new
     @author = Author.new
     @author.books.build
+    #@author.books.build # to create another one
+
     
     # since the 'simple_field_for' iterates on all books, we can create
     # another related book when adding another time
-    # @author.books.build
+    
     
     @genres =  Genre.all
     @genre = Genre.new
-    local_binding
+    
   end
 
   def create
     @author = Author.new(author_params)
-    local_binding
+    #local_binding
     if @author.save
       redirect_to root_path
     else
@@ -38,7 +40,7 @@ class AuthorsController < ApplicationController
   def edit
     @author = Author.find(params[:id])
     @author.books.build
-    @author.books.build.genre.build
+    # @author.books.build.genre.build
   end
 
   def update

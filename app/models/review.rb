@@ -27,7 +27,7 @@ class Review < ApplicationRecord
       user_names = user_names[1..-1]
       @user_reviews = []
       user_names.each do |user|
-        @user_reviews += User.includes( reviews: [ reviewable: [{ author: :country }, :country ]])
+        @user_reviews += User.includes( reviews: [ reviewable: [{ author: :country }]])
           .find_by(name: user).reviews
       end
     end

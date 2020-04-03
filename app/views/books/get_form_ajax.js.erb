@@ -1,7 +1,2 @@
-function injectForm() {
-  const divForm = document.getElementById('ajax-form');
-  divForm.innerHTML = '<%= j render "books/formj", input: @input %>';
-  document.querySelector('form[action="/get_form_ajax"]').reset();
-};
-// document.addEventListener('DOMContentLoaded', (event) => {});
-  injectForm();
+document.getElementById('ajax-form').innerHTML = '<%= j render "books/formj", input: @input %>'
+document.querySelector('form[action="books/get_form_ajax"]').reset();
