@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   get 'books/display_json'
   
-  post 'books/books_ajax'
+  get 'books/books_ajax'
   post 'get_form', to: 'books#get_form'
   post 'books/get_form_ajax'
   post 'get_form_ajax2', to: 'books#get_form_ajax2', as: 'get_form_ajax2'

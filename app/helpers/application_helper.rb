@@ -17,7 +17,7 @@ module ApplicationHelper
     
     # we create a form for a single object 'new_object'
     fields = f.simple_fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + "_fields", f: builder)
+      render(association.to_s.singularize + "fields", f: builder)
     end
 
     link_to( name, '#', data: {id: id, fields: fields.gsub("\n", "")}

@@ -60,6 +60,7 @@ class BooksController < ApplicationController
 
   def books_ajax
     @books = Book.includes( {author: :country}, :genre )
+    logger.debug "........................ICI"
     respond_to do |format|
       format.js
     end

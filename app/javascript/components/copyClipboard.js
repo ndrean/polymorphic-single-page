@@ -1,25 +1,8 @@
 inputToCopy = document.getElementById("to-copy");
-
-/* version avec document.execCommand 
-
-if (inputToCopy) {
-  doCopyButton = document.getElementById("do-copy");
-  doCopyButton.addEventListener("click", () => {
-    inputToCopy.select();
-    document.execCommand("copy");
-    const target = document.getElementById("ajax-form");
-    //target.document.execCommand('paste')
-    navigator.clipboard.readText().then(text => {
-      target.textContent = text;
-      inputToCopy.value = ""; // reset the input
-    });
-  });
-}
-*/
+copyButton = document.getElementById("copy-btn");
 
 /* version with Clipboard API */
-if (inputToCopy) {
-  copyButton = document.getElementById("copy-btn");
+if (inputToCopy && navigator.clipboard) {
   copyButton.addEventListener("click", () => {
     const val = document.getElementById("to-copy").value;
     navigator.clipboard.writeText(val).then(() => {
@@ -28,6 +11,18 @@ if (inputToCopy) {
         target.textContent = text;
       });
       inputToCopy.value = "";
+    });
+  });
+} else {
+  /* version avec document.execCommand  */
+  copyButton.addEventListener("click", () => {
+    inputToCopy.select();
+    document.execCommand("copy");
+    const target = document.getElementById("ajax-form");
+    //target.document.execCommand('paste')
+    navigator.clipboard.readText().then(text => {
+      target.textContent = text;
+      inputToCopy.value = ""; // reset the input
     });
   });
 }
