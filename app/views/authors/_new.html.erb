@@ -1,19 +1,3 @@
-<h5 class="text-center">partial <em>authors#_new.html.erb</em> linked with the controller <em>books</em> </h5>
-<%= link_to 'Back', root_path %>
-<ul>
-    <li>The view <em>/view/books/index</em> calls for rendering the partial <em>/views/authors/_new</em>.
-    The variables that feed this form, <em>@author = Author.new</em> and <em>@author.books.build</em>,
-    are thus initialized in the method <em>books#index</em>. 
-    </li>
-    <li>If we specify <em>url: books_path</em> in the form definition, then Rails will call the method 
-    books#create and use <em>form action="/books" method="post"</em>. 
-            
-    </li>
-    <li>If we don't specify it, since this partial is located in '/views/authors', then 
-    Rails will use <em>authors_path</em> and use <em>authors#create</em>, so will put <em>form action="authors" method="post"</em>
-    and call for the method <em>authors#create</em>.
-    </li>
-</ul>
 <div class="container">
     <div class="row">
         <div class="col-sm-12 col-md-6 border">

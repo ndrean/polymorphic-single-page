@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   
-  #get 'genres/new'
-  #get 'authors/genres/create'
   get 'users/new'
   get 'users/create'
   root to: 'books#index'
@@ -12,7 +10,7 @@ Rails.application.routes.draw do
   get 'books/books_by_author'
   
   get 'books/display_json'
-  #get "books/books_ajax"
+  
   post 'books/books_ajax'
   post 'get_form', to: 'books#get_form'
   post 'books/get_form_ajax'

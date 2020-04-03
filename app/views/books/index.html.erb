@@ -9,25 +9,25 @@
 
 <div class="container">
 <div class="row">
-<h3> <a href="#create"> As a user/admin, I can create/Edit an author, then a book and it's genre</a></h3>
+<h6> <a href="#create"> As a user/admin, I can create/Edit an author, then a book and it's genre</a></h6>
 </div>
 <div class="row">
-<h3> <a href="#"> As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
-</a></h3>
+<h6> <a href="#"> As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
+</a></h6>
 </div>
 <div class="row">
-<h3> <a href="#"> As a user, I can create reviews associated to an author or a book, or a movie</a></h3>
+<h6> <a href="#"> As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
 </div>
 
 <div class="row">
-  <h3><a href="#cookie"> Displaying form input (no model or Active Record object) within the same page</a>  </h3>
+  <h6><a href="#cookie"> Displaying form input (no model or Active Record object) within the same page</a>  </h6>
   </div>
   <div class="row">
-  <h3><a href="#2-rendering"> Rendering form with page</a>  </h3>
+  <h6><a href="#2-rendering"> Rendering form with page</a>  </h6>
   </div>
 
   <div class="row">
-    <h3><a href="#search"> Multi-select search Ajax rendered by pagination( Todo) </a></h3>
+    <h6><a href="#search"> Multi-select search Ajax rendered by pagination( Todo) </a></h6>
   </div>
 
   <div class="row">
@@ -246,13 +246,12 @@
     <%= simple_form_for :search,
       url: 'books/reviews_by_user',
       remote: true,
-      wrapper: :inline_form,
-      html: { class: "form-inline" },
       method: "GET" do |f| %>   
       <%= f.input_field :user_name, collection: @users_names, multiple: true %>
       <%= f.submit "Search", class:"btn btn-primary" %>
     <% end %>
   
+  <hr>
     <div id="ajax_reviews_by_user">
       <% if false && @name == nil %>
         <h3>All comments by users: usage of "reviewable"</h3>

@@ -1,17 +1,21 @@
 <%= link_to 'Back', root_path %>
 
 <ul>
-    <li>The view <em>/view/books/index</em> calls for the view <em>/views/authors/new</em>.
-    The variables that feed this form, <em>@author = Author.new</em> and <em>@author.books.build</em>,
-    are thus initialized in the method <em>books#index</em>. 
+    <li>The root view <strong>/view/books/index</strong> links to this view <strong>/views/authors/new</strong>.
+    Thus the method <strong>author#new</strong> initializes the variables used is this form.
     </li>
-    <li>If we specify <em>url: books_path</em> in the form definition, then Rails will call the method 
-    books#create and use <em>form action="/books" method="post"</em>. 
+    <li> This form uses 3 models, <strong>@author = Author.new</strong> and <strong>@book = @author.books.build</strong>,
+    and <strong>@genre = Genre.new</strong>. 
+    </li>
+    
+    <li>If we specify <strong>url: books_path <=> url: books/new</strong> in the form definition,
+    then Rails will call the method <strong>books#create</strong> when saving, and use <strong>form action="/books" method="post"></strong> 
+    ('POST' is the default method) 
             
     </li>
-    <li>If we don't specify it, since this partial is located in '/views/authors', then 
-    Rails will use <em>authors_path</em> and use <em>authors#create</em>, so will put <em>form action="authors" method="post"</em>
-    and call for the method <em>authors#create</em>.
+    <li>Since this view is located in <strong>/views/authors</strong>, then 
+    Rails will use <strong>authors_path</strong> and use <strong>authors#create</strong> by default when saving,
+    so will put <strong>form action="authors" method="post"</strong>.
     </li>
 </ul>
 
@@ -50,10 +54,8 @@
         </div>
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
         <br>
-    
-         
+        <legend>Create associated books</legend> 
         <div class="row border pl-2 pr-3" >
-            <p>Create associated books</p>
             <div class="row d-flex">
                  
                 <%= f.simple_fields_for(:books, :genre)  do |b| %>   
@@ -75,7 +77,7 @@
     <!-- !! with 'form.input', we must use 'input_html: {class:..}' -->
         <%= simple_form_for @genre, url: '/genres', remote: true,
                 wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
-
+        <legend>Create a new genre</legend>
             <%= b.input :name, placeholder: "Enter a new genre?",
                 input_html: { class: "ml-3 mt-2 p-2 input-author", id: "newgenre" } %>
 
