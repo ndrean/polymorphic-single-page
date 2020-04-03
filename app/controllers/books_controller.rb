@@ -36,7 +36,6 @@ class BooksController < ApplicationController
   def reviews_by_user
     # method 'find_reviews_by_title' defined in model 'Review' with 'self'
     @user_reviews = Review.find_reviews_by_user(params[:search])
-    
     if @user_reviews.class == Array
       @user_reviews = Kaminari.paginate_array(@user_reviews).page(params[:page]).per(5)
     end
