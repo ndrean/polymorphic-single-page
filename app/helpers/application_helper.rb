@@ -2,24 +2,17 @@
 # https://stevepolito.design/blog/create-a-nested-form-in-rails-from-scratch/
 
 module ApplicationHelper
-  def link_to_add_book(name, f, association, collection)
-    # we can add ooptions in JSON form
-
-    # f.object takes the object of the form builder
-    # f.object.send(association) in console to inspect and see we want 'klass' and 'new' to build a new book
+  def button_to_add_book(name, f, association, collection)
     # or f.object_reflect_on_association(association)
     new_object = f.object.send(association).klass.new
-    #new_object_g = f.object.send(association_genre).klass.new
-    
-
     # we create a unique id from the object_id
     id = new_object.object_id
-    
     # we create a form for a single object 'new_object'
     fields = f.simple_fields_for(association, new_object, child_index: id) do |builder|
       render(association.to_s.singularize + "fields", f: builder, genres: collection)
     end
-    link_to( name, '#', data: {id: id, fields: fields.gsub("\n", "")}
+
+    button_to( name, '#', class: "add_field btn btn-primary",data: {id: id, fields: fields.gsub("\n", "")}, remote: true
     )
     # 'gsub' to escape new lines
   end

@@ -59,11 +59,13 @@
             <div class="row d-flex">
                  
                 <%= f.simple_fields_for(:books, :genre)  do |b| %>   
+                    <%#= binding.pry %>
                     <%= render 'authors/bookfields', f:b, genres: @genres %>
-                <% end %>
-                <%= link_to_add_book 'Add a book', f, :books, @genres %>
-                
-            </div>   
+                <% end %>   
+
+                <%= button_to_add_book 'Add a book', f, :books, @genres %>
+            </div> 
+            
         </div>
     
                 

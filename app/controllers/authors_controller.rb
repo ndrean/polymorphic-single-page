@@ -6,6 +6,8 @@ class AuthorsController < ApplicationController
   def new
     @author = Author.new
     @author.books.build
+    @author.books.build
+    
     
     #@author.books.build # to create another one
 

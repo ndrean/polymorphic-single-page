@@ -1,9 +1,4 @@
 bookDiv = document.getElementById('new_book');
 if (bookDiv) {
-    // bookDiv.insertAdjacentHTML('beforeend', '<%= j render @author.books, ff:f, genres: @genres %>')
     bookDiv.insertAdjacentHTML('beforeend', '<%= j render "authors/bookfields", genres: @genres, genre: @genre, ff:f  %> ');
-
 };
-
-// document.addEventListener('click', () => {
-//     console.log(document.activeElement); //.nextElementSibling);

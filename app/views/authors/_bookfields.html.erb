@@ -10,7 +10,7 @@
   </div>
 </div>
 
-    <%= f.input :id, as: :hidden, value: @author.books.object_id %>
-    <%= f.input_field :_destroy, as: :hidden %> 
+<%= f.input :id, as: :hidden, value: @author.books.object_id %>
+<%= f.input_field :_destroy, as: :hidden %> 
     <%#= since we don't want to show see the check %> 
-    <%= link_to 'DeletE', '#', class: 'btn' %>
+<%= button_to 'Delete', '#', class: 'btn btn-danger' %>
