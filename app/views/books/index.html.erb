@@ -214,7 +214,7 @@
       <%= simple_form_for :search,
         url: 'books/reviews_by_title',
         remote: true,
-        method: "GET" do |f| %>   
+        method: :get do |f| %>   
         <%= f.button :submit, "Search", class:"btn btn-primary"%>
         <%= f.input_field :input_title, collection: @titles, multiple: true %>   
       <% end %>
@@ -232,7 +232,7 @@
         url: 'books/books_by_author',
         wrapper: :inline_form,
         remote: true,
-        method: "GET" do |f| %>   
+        method: :get do |f| %>   
         <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
         <%= f.button :submit, "Search", class:"btn-primary" %>
       <% end %>
@@ -247,7 +247,7 @@
     <%= simple_form_for :search,
       url: 'books/reviews_by_user',
       remote: true,
-      method: "GET" do |f| %>   
+      method: :get do |f| %>   
       <%= f.input_field :user_name, collection: @users_names, multiple: true %>
       <%= f.submit "Search", class:"btn btn-primary" %>
     <% end %>
