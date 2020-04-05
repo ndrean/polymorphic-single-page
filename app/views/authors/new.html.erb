@@ -42,15 +42,15 @@
     <!--  '.input_field' removes the div around -->
                 <%= f.input_field :name, placeholder: "Author's name",
                     class: "input-author" %>
-    <!-- !! with 'input_field', we must use 'class: ...' without 'thml_input-->
+    <!-- !! with 'input_field', we must use 'class: ...' without 'html_input-->
             </div>
             <div class="col-sm-4 col-md-4">
                 <%= f.association :country, prompt: "Select a country", label: false, 
                     input_html: { class: "form-control" } %>
             </div>
 
-        <%# # https://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormTagHelper.html#method-i-hidden_field_tag %>
-                <%= f.input :id, as: :hidden, value: @author.object_id  %>
+    <%# # https://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormTagHelper.html#method-i-hidden_field_tag %>
+            <%= f.input :id, as: :hidden, value: @author.object_id  %>
         </div>
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
         <br>
@@ -63,28 +63,31 @@
                     <%= render 'authors/bookfields', f:b, genres: @genres %>
                 <% end %>   
 
-                <%= button_to_add_book 'Add a book', f, :books, @genres %>
+                <%#= button_to_add_book 'Add a book', f, :books, @genres %>
             </div> 
             
         </div>
     
                 
         <div class="row p-2">
-            <%= f.submit "Create author & books", class:"btn btn-primary"%> 
+        <!-- on submit, this will call the method 'author#create' which responds standard way -->
+            <%= f.button :submit, "Create author & books", class:"btn btn-primary"%> 
         </div>
         
         <% end %>
     </div>
     
+    <!--  genre#new --> 
     <div class="row border p-2" id="new-genre" >
     <!-- !! with 'form.input', we must use 'input_html: {class:..}' -->
         <%= simple_form_for @genre, url: '/genres', remote: true,
-                wrapper: :inline_form, html: { class: "form-inline" } do |b| %>
-        <legend>Create a new genre</legend>
+                wrapper: :inline_form, html: { class: "form-inline"}  do |b| %>
+            <legend>Create a new genre</legend>
             <%= b.input :name, placeholder: "Enter a new genre?",
-                input_html: { class: "ml-3 mt-2 p-2 input-author", id: "newgenre" } %>
+                input_html: { data: {test:"toto"}, class: "ml-3 mt-2 p-2 input-author" } %>
 
-            <%= b.submit "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
+            <%= b.button :submit, "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
+            <!-- this will call genre#create which is AJAX, responds with genre/create.js --> 
         
         <% end %>
     </div>

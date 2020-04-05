@@ -1,6 +1,0 @@
-bookDiv = document.getElementById('new_book');
-if (bookDiv) {
-    console.log("ici");
-    
-    bookDiv.insertAdjacentHTML('beforeend', '<%= j render "authors/book_fields", ff:ff, genres: @genres, books: @books %>')
-};

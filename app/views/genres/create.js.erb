@@ -1,17 +1,25 @@
+// append the new input at the end of the "genres" tag list
 
 if (document.getElementById('new-genre')) {
     // const genreId = parseInt(document.activeElement.id.match(/(\d+)/g)[0]);
-    const target = document.querySelector('.radio-choices');
     
-    // essai de mettre l'input à la fin de tous les genres
     const targets = document.querySelectorAll('.radio-choices');
-    // Array.from(targets).forEach((tag) => {
-    //     console.log(tag.querySelector('.radio-choices input[type="hidden"')..name)
-    // })
-    [...targets].forEach((tag)=> {
-        console.log(tag.querySelector('.radio-choices input[type="hidden"').name)
-        tag.insertAdjacentHTML('beforeend', '<%= j render "genres/formgenre", genre: @genre %> ')
-
+    const tagNames = []
+    const targetsArray = [...targets] // or Array.from(targets)
+    const regex =  /(\d+$)/
+    
+    targetsArray.forEach( tag => {
+        let newID = tag.lastElementChild.querySelector('input').getAttribute('id')
+        let newLabelName = tag.lastElementChild.querySelector('label').getAttribute('for')
+        
+        tag.insertAdjacentHTML('beforeend','<%= j render "genres/formgenre", genre: @genre %>')
+    
+        newID = newID.replace(regex,"")+regex.exec(tag.lastElementChild.querySelector('input').getAttribute('id'))[0]
+        newLabelName = newLabelName.replace(regex,"")+regex.exec(tag.lastElementChild.querySelector('label').getAttribute('for'))[0]
+        
+        tag.lastElementChild.querySelector('input').setAttribute('id', newID)
+        tag.lastElementChild.querySelector('label').setAttribute('for',newLabelName)
     })
     document.getElementById('new_genre').reset()
 };
+<%#= j render "genres/formgenre", genre: @genre %>

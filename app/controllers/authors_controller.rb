@@ -7,23 +7,17 @@ class AuthorsController < ApplicationController
     @author = Author.new
     @author.books.build
     @author.books.build
-    
-    
-    #@author.books.build # to create another one
-
-    
     # since the 'simple_field_for' iterates on all books, we can create
     # another related book when adding another time
-    
+    #@author.books.build
     
     @genres =  Genre.all
     @genre = Genre.new
-    
   end
 
   def create
     @author = Author.new(author_params)
-    #local_binding
+    logger.debug ".............................create"
     if @author.save
       redirect_to root_path
     else
