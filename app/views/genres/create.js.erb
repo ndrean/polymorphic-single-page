@@ -1,25 +1,38 @@
-// append the new input at the end of the "genres" tag list
+/* 
+- appends the new input at the end of each "book-genres" tag list by rendering a generic tag
+- we have to change the index of the added tag according to the book index
+- so before adding, we capture the last tag, read it's attributes, append a new own and modify it's attributes
+*/
 
-if (document.getElementById('new-genre')) {
-    // const genreId = parseInt(document.activeElement.id.match(/(\d+)/g)[0]);
-    
-    const targets = document.querySelectorAll('.radio-choices');
-    const tagNames = []
-    const targetsArray = [...targets] // or Array.from(targets)
+if (document.getElementById('new-genre')) {   
+    const targets= [...document.querySelectorAll('.radio-choices')] // or Array.from(document.etc)
     const regex =  /(\d+$)/
     
-    targetsArray.forEach( tag => {
-        let newID = tag.lastElementChild.querySelector('input').getAttribute('id')
-        let newLabelName = tag.lastElementChild.querySelector('label').getAttribute('for')
+    targets.forEach( item => {
+        //helpers
+        const last = tag => item.lastElementChild.querySelector(tag)
+        const getLastAttr = (tag, attr) => last(tag).getAttribute(attr)
+
+        // capture 'input#id' and 'label#for' of last tag before insertion
         
-        tag.insertAdjacentHTML('beforeend','<%= j render "genres/formgenre", genre: @genre %>')
+        let inputId = getLastAttr('input','id') // => author_books_attributes_i_genre_id_647
+        let labelfor = getLastAttr('label','for') // same to bind label with checkbox
+        const name = last('input').name // grouping attribute: author[books_attributes][i][genre_id]
+        
+        item.insertAdjacentHTML('beforeend','<%= j render "genres/formgenre", genre: @genre %>')
     
-        newID = newID.replace(regex,"")+regex.exec(tag.lastElementChild.querySelector('input').getAttribute('id'))[0]
-        newLabelName = newLabelName.replace(regex,"")+regex.exec(tag.lastElementChild.querySelector('label').getAttribute('for'))[0]
+        // change the  index of books in the checkboxes 
+        inputId = inputId.replace(regex,"") + regex.exec(inputId)[0]
+        labelfor = labelfor.replace(regex,"") + regex.exec(labelfor)[0]
+
+        // author_books_attributes_O_genre_id_647 => author_books_attributes_i_genre_id_ + 647
         
-        tag.lastElementChild.querySelector('input').setAttribute('id', newID)
-        tag.lastElementChild.querySelector('label').setAttribute('for',newLabelName)
+        last('input').setAttribute('id', inputId)
+        last('input').name = name
+        last('label').setAttribute('for', labelfor)
     })
     document.getElementById('new_genre').reset()
 };
-<%#= j render "genres/formgenre", genre: @genre %>
+
+
+

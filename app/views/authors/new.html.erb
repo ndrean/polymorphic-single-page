@@ -7,18 +7,20 @@
     <li> This form uses 3 models, <strong>@author = Author.new</strong> and <strong>@book = @author.books.build</strong>,
     and <strong>@genre = Genre.new</strong>. 
     </li>
-    
-    <li>If we specify <strong>url: books_path <=> url: books/new</strong> in the form definition,
-    then Rails will call the method <strong>books#create</strong> when saving, and use <strong>form action="/books" method="post"></strong> 
-    ('POST' is the default method) 
-            
-    </li>
     <li>Since this view is located in <strong>/views/authors</strong>, then 
     Rails will use <strong>authors_path</strong> and use <strong>authors#create</strong> by default when saving,
-    so will put <strong>form action="authors" method="post"</strong>.
+    so will put <strong>form action="authors" method="post"</strong> ('POST' is the default method). 
+    </li>
+
+
+    <li>If we specify <strong>url: books_path <=> url: books/new</strong> in the form definition,
+    then Rails will call the method <strong>books#create</strong> when saving, and use <strong>form action="/books" method="post"></strong> 
+    
+            
     </li>
 </ul>
-
+<%= link_to "Back", :back %>
+<h4>Create an author, then create one to three associated books. We can create a genre and associate it (one-to-one) to a book</h4>
 <div class="container">
     <div class="row">
         <% if @author.errors.any? %>

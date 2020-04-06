@@ -5,46 +5,40 @@
   </div>
 </div>
 
-
+<div id="start"></div>
 
 <div class="container">
-<div class="row">
-<h6> <a href="#create"> As a user/admin, I can create/Edit an author, then a book and it's genre</a></h6>
-</div>
-<div class="row">
-<h6> <a href="#"> As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
-</a></h6>
-</div>
-<div class="row">
-<h6> <a href="#"> As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
-</div>
-
-<div class="row">
-  <h6><a href="#cookie"> Displaying form input (no model or Active Record object) within the same page</a>  </h6>
-  </div>
   <div class="row">
-  <h6><a href="#2-rendering"> Rendering form with page</a>  </h6>
+    <h6><%= link_to "As a user/admin, I can create an author, then a book and it's genre", new_author_path %></h6>
+  </div>
+
+<div class="row">
+  <h6> <a href="#"> Go to: As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
+  </a></h6>
+  </div>
+<div class="row">
+  <h6> <a href="#"> Go to: As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
+</div>
+
+<div class="row">
+  <h6><a href="#form-no-model"> Go to: Form with no model (no Active Record object) within the same page</a>  </h6>
+  </div>
+  
+<div class="row">
+  <h6><a href="#books-all">Go to: Rendering partial within a page with AJAX</a></h6>
+</div>
+  <div class="row">
+    <h6><a href="#search"> Go to: Multi-select search Ajax rendered</a></h6>
   </div>
 
   <div class="row">
-    <h6><a href="#search"> Multi-select search Ajax rendered by pagination( Todo) </a></h6>
-  </div>
-
-  <div class="row">
-    <h3><a href="#API-JSON"> API call and JSON rendering </a></h3>
+    <h6><a href="#API-JSON"> Go to: JSON rendering </a></h6>
   </div>
 
 </div>
-<div class="container" id="create">
-  <h3> Triple associated 'has_may / belongs_to' nested form to CREATE an author, his books and set/create it's genre</h3>
 
-  <%= link_to 'Create Author / Book', new_author_path %>
-
-      
-<h3> Triple associated 'has_may / belongs_to' nested form to EDIT an author or a book and it's genre</h3>
-</div>
 <hr>
-<div class="container" id="cookie"> 
+<div class="container" id="form-no-model"> 
 <h3>Form with no model rerendered in the page</h3>
   <p> To submit a form with no model, we use a symbol <strong>simple_form_for :search</strong>. Forms are 'POST' by default,
   and we specifiy the action via <strong>controller#method</strong>
@@ -114,10 +108,11 @@
     </div>
     <br>
   </div>
-  <hr>
+  <p><a href="#start">Back to start</a></p> 
 </div>
 
-<div class="row" id='2-rendering'>
+<hr>
+<div class="row" id='books-all'>
   <div class="container">
     <h4>Rendering partial within a page with AJAX </h4>
     </p> The link <strong>'View all books with AJAX' <=> < '%=' link_to "View All books with AJAX", "books/books_ajax", remote: true '%'></strong>
@@ -158,7 +153,8 @@
     <div id="hideMe" > <!-- class="not-active" -->
       <div id = "books-all-ajax"></div>  
     </div>
-  </div>   
+  </div>  
+  <p><a href="#start">Back to start</a></p>
 </div>
      
 
@@ -260,7 +256,9 @@
       <% end %>
     </div>
   </div>
+  <a href="#start">Back to start</a>
 </div>
+
 <hr>
 <div class="container" id="API-JSON">
   <div class="col">
@@ -271,7 +269,8 @@
       <p> The same info is displayed, but through the copy of the partial without the _underscore, ie 'books/reviews_all.html.erb'. 
       This time, the data is furnished by the method books#reviews_all' which 'lazy' renders '../books/books_all.html' with Rails naming association convention. </p>
 
-      <p><%= link_to "View 'books.json' in another page", books_display_json_path, class:'btn btn-primary' %> </p>
+      <p><%= link_to "View books.json in another page", books_display_json_path, class:'btn btn-primary' %> </p>
       <p> "render json: @books"</p>
   </div>
+  <a href="#start">Back to start</a>
 </div>

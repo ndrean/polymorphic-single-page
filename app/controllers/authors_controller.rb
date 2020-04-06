@@ -7,6 +7,7 @@ class AuthorsController < ApplicationController
     @author = Author.new
     @author.books.build
     @author.books.build
+    @author.books.build
     # since the 'simple_field_for' iterates on all books, we can create
     # another related book when adding another time
     #@author.books.build

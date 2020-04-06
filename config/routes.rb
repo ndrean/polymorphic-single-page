@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  
   get 'users/new'
   get 'users/create'
   root to: 'books#index'
@@ -24,5 +23,3 @@ Rails.application.routes.draw do
   #post 'authors/create'
   
 end
-
-# by declaring 'root: 'books#index', we can get rid of the 'books/' prefix and the alias
