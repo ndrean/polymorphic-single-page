@@ -1,0 +1,21 @@
+<!-- https://sipsandbits.com/2018/10/11/building-complex-forms-with-rails/ -->
+<div class="container">
+    <div class="row">
+        <%= form_for @author do |f| %>
+        <%= f.text_field :name %>
+        <%= f.fields_for :books do |ff| %>
+        <div>
+            <%= ff.text_field :title %>
+            <%= ff.hidden_field :genre_id, value: ff.object.genre_id %>
+            <%= ff.object.genre%>
+        </div>
+        <%end %>
+        <%= f.submit %>
+        <% end %>
+    </div>
+</div>
+
+Controlleur:
+Genre.all.each do |genre|
+@author.books.build(genre_id: genre.id)
+end

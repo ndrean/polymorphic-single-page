@@ -20,6 +20,7 @@
     </li>
 </ul>
 <%= link_to "Back", :back %>
+<%= link_to 'Home', root_path %>
 <h4>Create an author, then create one to three associated books. We can create a genre and associate it (one-to-one) to a book</h4>
 <div class="container">
     <div class="row">
@@ -86,7 +87,7 @@
                 wrapper: :inline_form, html: { class: "form-inline"}  do |b| %>
             <legend>Create a new genre</legend>
             <%= b.input :name, placeholder: "Enter a new genre?",
-                input_html: { data: {test:"toto"}, class: "ml-3 mt-2 p-2 input-author" } %>
+                input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
 
             <%= b.button :submit, "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
             <!-- this will call genre#create which is AJAX, responds with genre/create.js --> 
@@ -94,3 +95,4 @@
         <% end %>
     </div>
 </div>
+<hr>

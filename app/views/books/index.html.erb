@@ -11,111 +11,160 @@
   <div class="row">
     <h6><%= link_to "As a user/admin, I can create an author, then a book and it's genre", new_author_path %></h6>
   </div>
-
-<div class="row">
-  <h6> <a href="#"> Go to: As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
-  </a></h6>
-  </div>
-<div class="row">
-  <h6> <a href="#"> Go to: As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
-</div>
-
-<div class="row">
-  <h6><a href="#form-no-model"> Go to: Form with no model (no Active Record object) within the same page</a>  </h6>
-  </div>
-  
-<div class="row">
-  <h6><a href="#books-all">Go to: Rendering partial within a page with AJAX</a></h6>
-</div>
   <div class="row">
-    <h6><a href="#search"> Go to: Multi-select search Ajax rendered</a></h6>
+    <h6> <a href="#"> Go to: As a user/author, I can create/Edit a book and add/create it's genre, and add/create it's author
+    </a></h6>
   </div>
-
+  <div class="row">
+    <h6> <a href="#"> Go to: As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
+  </div>
+  <div class="row">
+    <h6><a href="#form-no-model"> Go to: Form with no model (no Active Record object) within the same page</a>  </h6>
+  </div>
+  <div class="row">
+    <h6><a href="#books-all">Go to: Rendering partial within a page with AJAX</a></h6>
+  </div>
+  <div class="row">
+    <h6><a href="#genre-fetch">Go to: Rendering partial client-side with AJAX and fetch</a></h6>
+  </div>
+  <div class="row">
+      <h6><a href="#search"> Go to: Multi-select search Ajax rendered</a></h6>
+  </div>
   <div class="row">
     <h6><a href="#API-JSON"> Go to: JSON rendering </a></h6>
   </div>
-
 </div>
 
-<hr>
+
 <div class="container" id="form-no-model"> 
+<hr>
 <h3>Form with no model rerendered in the page</h3>
-  <p> To submit a form with no model, we use a symbol <strong>simple_form_for :search</strong>. Forms are 'POST' by default,
-  and we specifiy the action via <strong>controller#method</strong>
+  <p> To submit a form with no model, we use a <strong>symbol</strong> or an <strong>url</strong>. With the form helper <strong>Simple_Form</strong>,
+  we use a symbol <strong>:search</strong> (for example) and precise the url to the action <strong>controller#method</strong>. 
+  With the form helper <strong>form_with</strong>, we just specify the <strong>url</strong> of the action. This form is
+  <strong>remote: true</strong> by default, so awaits a <strong>method.js.erb</strong> file to render the result. We can specify
+  <strong>local: true</strong> if we want non-AJAX rendering.
+  Forms are 'POST' by default. The method called by this form (url calling controller#method) will capture the input by the params.
+  Our form submission is CSRF protected since we have a hidden input that contains a value
+  that is transmitted with the form
   </p>
 
-  <h5>Submitting a form via cookie (with page refresh)</h5>
-  The input of this form will be transmitted to this page via a cookie. A cookie is declared by naming it,
-  for example <strong>cookies[:form]</strong>. The controller method saves the params in a cookie. Then the method calls 'redirect_to' this same page. There is a partial '_form.html.erb' bellow waiting for an input: %= render 'books/form'  % . Once submitted, the input appears bellow. 
+  <hr>
+  <p>We use Simple_Form here. To simulate saving in a database, we store the params in a cookie. A cookie is declared by naming it: <strong>cookies[:form] = params[...]</strong>.
+  The method then calls a 'redirect_to' this same page. Since there is an HTML bellow  <strong>Result: <'%= render 'books/form' %></strong> 
+  waiting to display a partial <strong>books/_form.html.erb</strong> that contains <strong><'%= cookies[:form] %></strong>. 
+  Once submitted, the page is refreshed and the input appears bellow. 
   We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
   a page refresh will reset the partial (this is the case here).
+  </p>
   <div class="row">
     <div class="col">
-    <%= simple_form_for( :search, url: get_form_path) do |f| %>   
+      <ul>
+        <ol><'input type="hidden" name="authenticity_token" </ol>
+        <ol> value="xxxxxx=="></ol>
+        <ol><'%= simple_form_for(:search, url: get_form_path,...) do |f| %></ol>
+        <ol> <'%= f.text_field :search %></ol>
+      </ul>
+    </div>
+    <div class="col">
+    <%= simple_form_for( :search, url: get_form_path, wrapper: :inline_form, html: { class: "form-inline"}) do |f| %>   
       <%= f.input_field :input %>
       <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
     <% end %>
     </div>
     <div class="col">
-      Result: <h6> <%= render 'books/form'  %></h6>
+      Result:  <%= render 'books/form', result: cookies[:form] %>
       <% cookies.delete :form %>
     </div>
   </div>
   
-  <br>
+  <hr>
   <h5>Submitting a form via AJAX</h5>
-  <p> This form has no model so we use a symbol <strong>:search</strong> to the form helper
-  <strong>simple_form_for </strong>. The form is AJAX submitted with <strong>remote: true</strong>.
-  The method is specified by <strong>url: "controller/method_name"</strong>. It captures the input
-  with <strong>params[:search]</strong>. By default, it is <strong>POST</strong>.
-  In the controler, we ask the method to <strong>respond_to format.js</strong>: it will call
-  the file <strong>method_name.js.erb</strong> written in a 'js.erb'. The method will pass the data 
-  to the .js.erb file. It will call a Javascript function that will render an HTML string into the HTML attribute of a DOM element.
-  </p>
-  
+  <p>By default, the default method is <strong>POST</strong>. We use the Rails helpers  <strong>form_with</strong> and <strong>Simple_Form</strong>.
+  The first 'form_with' uses an url to call the action <strong>url: controller/method</strong>, and 'Simple Form'
+  uses a symbol <strong>:search</strong> and the method is specified by <strong>url: "controller/method_name"</strong>.
+  The helper 'form_with' is <strong>remote: true</strong> by default, and we have to specify it for 'Simple Form'. 
+  Since we use AJAX, rendering will done by the browser. The method will save the params in an instance variable
+  and te data will be passed to the JS file  <strong>method.js.erb</strong>. A Javascript function will render
+  an HTML string into the HTML attribute of a DOM element. We also have a CSRFToken iva a hidden input. </p>
   <div class="row">
     <div class="col">
-      <%= simple_form_for(:search, method: :post, url: 'books/get_form_ajax', remote: true) do |f| %>   
-        <%= f.input_field :input, id:"input1", placeholder:"Type n Click"%>
+    <ul>
+     <ol><strong>file.html.erb</strong></ol>
+      <ol><'%= form_with url:'books/get_form_3' do |f| %></ol>
+      <ol><'%= f.text_field :search %></ol>
+      <ol><strong>controller</strong></ol>
+      <ol>@result = params[:input]</ol>
+      <ol><strong>method.js.erb</strong></ol>
+      <ol>....textContent = "<'%= @result %>"</ol>
+    </ul>
+    </div>
+    
+    <div class="col">
+      <%= form_with url:'books/get_form_1' do |f| %>
+        <%= f.text_field :input %>
+        <%= f.submit "Form_with (AJAX)", class:'btn btn-primary' %>
+      <% end %>
+      <br>
+      <%= simple_form_for(:search, url: 'books/get_form_simple_form', remote: true) do |f| %>   
+        <%= f.input_field :input, id:"input1", placeholder:""%>
          <!-- usage of .input_field to display aligned -->
-        <%= f.button :submit, "Simple_form / AJAX", class:"btn btn-primary"%>
+        <%= f.button :submit, "Simple_form AJAX", class:"btn btn-primary"%>
       <% end %>
     </div>
     <div class="col">
-      <p>Result: <span id="ajax-form" > </span></p>
+      <p>Result: <span id="form-1"> </span></p>
+      <br>
+      <p>Result: <span id="form-2" > </span></p>
     </div>
   </div>
+
+
+
+  <br>
+  
+  
+  <div class="row">
+    <div class="col">
       
+    </div>
+    <div class="col">
+      
+    </div>
+  </div>
+  We also used the Rails form helper <strong>Simple_Form</strong> so again it is CSRF protected.    
     <!-- Note: for a custom button, we do: -->
     <!--  <%#= f.button :submit, 'Search!' do %> -->
     <!--            my custom button text           -->
     <!--  <%# end %>                             -->
     <hr>
-    <h5>Submitting a form with clipboard. </h5>
-  <p>Example <strong>copyClipboard.js</strong> by using the clipboard API or <strong>document.exeCommand</strong>
-  if not suported by the browser.</p>
-  <div class="row">
-    <div class="col">
+    <h5>Submitting data from clipboard. </h5>
+    <p>Example <strong>copyClipboard.js</strong> by using the clipboard API or <strong>document.exeCommand</strong>
+    if not suported by the browser.</p>
+    <div class="row">
+      <div class="col">
     <!-- do not use 'form'. Used the Javascript function 'copyClipboard.js' -->
-      <input id="to-copy" type="text" style= "border: 1px solid grey"
-        placeholder = "type n click to copy/paste">
-      <button id="copy-btn" class="btn btn-primary">Copy to clipboard</button>
-     
+        <input id="to-copy" type="text" style= "border: 1px solid grey"
+          placeholder = "type n click to copy/paste">
+        <button id="copy-btn" class="btn btn-primary">Copy to clipboard</button>
+      </div>
+      <div class="col">
+        <p>Result is pasted here: <span id = 'clipboard'></span></p>
+      </div>
+      <br>
     </div>
-    
-    <div class="col">
-      <p>Result is pasted here: <span id = 'clipboard'></span></p>
+    <div class="row">
+      <p><a href="#start">Back to start</a></p> 
     </div>
-    <br>
-  </div>
-  <p><a href="#start">Back to start</a></p> 
 </div>
 
-<hr>
-<div class="row" id='books-all'>
-  <div class="container">
+
+<div class="container" id='books-all'>
+  <hr>
+  <div class="row">
+  
     <h4>Rendering partial within a page with AJAX </h4>
-    </p> The link <strong>'View all books with AJAX' <=> < '%=' link_to "View All books with AJAX", "books/books_ajax", remote: true '%'></strong>
+    <p> The link <strong>'View all books with AJAX' <=> < '%=' link_to "View All books with AJAX", "books/books_ajax", remote: true '%'></strong>
     calls the method (controller#method) <strong>books#books_ajax</strong>. We specified <strong>remote: true</strong>,
     so that we will have an AJAX call, and we have to add in the controller's method the following lines:
     <ul>
@@ -143,7 +192,7 @@
 
     <p> A toggle button display/hide is added and triggers a listening Javascript function <strong>toggleDiv.js</strong>. On clic, it sets  
     <strong>toggleAttribute('hidden')</strong> on the div container of the response (alternatively, we can add/remove
-     <strong>classList.toggle('active')</strong> to this container div where 'active' is the CSS class <strong>.active {display: none;}</strong>.
+    <strong>classList.toggle('active')</strong> to this container div where 'active' is the CSS class <strong> {display: none;}</strong>.
     </p>
     <p>
       <%= link_to 'View all books with AJAX', "books/books_ajax", remote: true, class:'btn btn-primary' %>
@@ -153,16 +202,55 @@
     <div id="hideMe" > <!-- class="not-active" -->
       <div id = "books-all-ajax"></div>  
     </div>
-  </div>  
-  <p><a href="#start">Back to start</a></p>
-</div>
-     
-
-<hr>
-<p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
- We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
-<div class="container">
+    
+  </div>
   <div class="row">
+    <p><a href="#start">Back to start</a></p>
+  </div>
+</div>  
+
+<div class="container" id="genre-fetch">
+<hr>
+    <h4>Rendering partial with AJAX and fetch (without <strong>remote: true</strong>)</h4>
+    <p>We use a basic HTML form, without Rails helpers. There is no hidden input.</p>
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        <ul>
+          <ol>'<'form id="formGenre"> <!-- No need for action or method attributes  --></ol>
+          <ol>'<'input type="text" id="inputGenre"></ol>
+          <ol>'<'input type="submit" value="Create Genre"></ol>
+          <ol>'<'/form></ol>  
+        </ul>
+      </div>    
+      <div class="row">
+        <form id="formGenre"> <!-- No need for action or method attributes  -->
+          <input type="text" id="inputGenre">
+          <input type="submit" value="Create Genre">
+        </form>
+        <%# <%= form_with model: @genre, url: 'genres/createGenre' do |f|  %>
+          <%#= f.text_field :name, input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
+          <%#= submit_tag "Create", class:"btn btn-success" %>
+        <%# end %>
+
+      </div>
+    </div>
+    <div class="col radio-choices" id="display-genres">
+      <% @genres.each do |genre| %>
+        <p class="radio-label" ><%= genre.name %></p>
+      <% end %>
+    </div>
+  </div>
+</div> 
+
+
+
+
+<div class="container"><hr>
+
+  <div class="row">
+    <p>Books and authors can get comments by users with a polymorphic association (type <=> Book or Author, and id).
+    We also have a 'User has_many :books' and 'User has_many :authors' association as a user can put many reviews which is polymorphic.  </p>
 
     <h3>Uncommented books: using a scope and finding nil column on associated table</h3>
     <%= render 'books/reviewed_unreviewed', books: @unreviewed_books %>

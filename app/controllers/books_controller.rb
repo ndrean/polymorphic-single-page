@@ -53,30 +53,41 @@ class BooksController < ApplicationController
   end
 
   def display_json
-    @books = Book.includes(:author, :genre)
-    render json: @books.to_json(include:  {author: {only: :name}, genre: {only: :name}})
+    books = Book.includes(:author, :genre)
+    render json: books.to_json(include:  {author: {only: :name}, genre: {only: :name}})
     # this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
   end
 
   def books_ajax
     @books = Book.includes( {author: :country}, :genre )
-    logger.debug "........................ICI"
     respond_to do |format|
       format.js
     end
   end
 
   def get_form
+    #binding.pry
     if params[:search].present?
       cookies[:form] = params[:search][:input]
+      #logger.debug "........................1 : cookies[:form] = #{cookies[:form]}"
       redirect_to root_path
     end
   end
   
-  def get_form_ajax
-    if params[:search].present?
-      @input = params[:search][:input]
-      logger.debug ".............................#{@input}"
+  def get_form_1
+    @result = params[:input] # result transmitted to the view
+    if @result.present?
+        respond_to do |format|
+          format.js
+        end
+    end
+  end
+
+  def get_form_simple_form
+    logger.debug ".............................#{params}"
+    @result = params[:search][:input]
+    if @result.present?
+      logger.debug ".............................#{@result}"
       respond_to do |format|
         format.js
       end
@@ -109,21 +120,7 @@ class BooksController < ApplicationController
   # end
 
 
-  def create
-    #Genre.destroy(Genre.last.id)
-    #@author = Author.find(author_params)
-    
-    # binding.pry
-    # #@genre = Genre.find(author_params)
-    # if @author.save
-    #   flash[:success] = "ok"
-    #   redirect_to root_path
-    # else
-    #   flash[:error] = "a bug."
-    #   redirect_to new_book_path
-    # end
-  end
-
+private
   def author_params
     # version select ok
     #params.require(:author).permit(:name,  :country_id, :genre, books_attributes:  [:title, :genre_id, '_destroy'])
