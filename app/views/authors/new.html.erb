@@ -65,13 +65,9 @@
                     <%#= binding.pry %>
                     <%= render 'authors/bookfields', f:b, genres: @genres %>
                 <% end %>   
-
-                <%#= button_to_add_book 'Add a book', f, :books, @genres, :genre %>
             </div> 
-            
         </div>
     
-                
         <div class="row p-2">
         <!-- on submit, this will call the method 'author#create' which responds standard way -->
             <%= f.button :submit, "Create author & books", class:"btn btn-primary"%> 

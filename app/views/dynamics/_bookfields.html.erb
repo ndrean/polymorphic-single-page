@@ -3,6 +3,11 @@
   <div class="col-sm-8 align-items-center p-3">
     <%= f.input_field :title,  class: "input-author", placeholder: 'Enter a title'%>
   </div>
+  <div class="col-sm-12 radio-choices">
+  <!-- use 'item_wrapper_class' to design CSS class for a collection -->
+    <%= f.input_field :genre_id, as: :radio_buttons,
+        item_wrapper_class: "radio-label", collection: @genres %>
+  </div>
 
   <%= f.input_field :_destroy, as: :hidden %> 
 

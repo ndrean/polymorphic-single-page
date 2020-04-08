@@ -24,8 +24,8 @@
             <legend>Create associated books</legend> 
             <div class="row pl-2 pr-3 d-flex" >
                 <div class="col">
-                    <%= f.simple_fields_for(:books)  do |b| %>
-                        <%= render 'dynamics/bookfields', f:b %>
+                    <%= f.simple_fields_for(:books, :genre)  do |b| %>
+                        <%= render 'dynamics/bookfields', f:b, genres: @genres %>
                     <% end %> 
                 </div> 
             </div>
@@ -38,6 +38,20 @@
             <div class="row p-2">
                 <%= f.button :submit, "Create author & books", class:"btn btn-primary"%> 
             </div>
+        <% end %>
+    </div>
+
+    <div class="row border p-2" id="new-genre" >
+    <!-- !! with 'form.input', we must use 'input_html: {class:..}' -->
+        <%= simple_form_for @genre, url: '/genres', remote: true,
+                wrapper: :inline_form, html: { class: "form-inline"}  do |b| %>
+            <legend>Create a new genre</legend>
+            <%= b.input :name, placeholder: "Enter a new genre?",
+                input_html: { class: "ml-3 mt-2 p-2 input-author" } %>
+
+            <%= b.button :submit, "Create", class:"btn-success ml-4 pl-3 pr-3 mt-2 input-author"  %>
+            <!-- this will call genre#create which is AJAX, responds with genre/create.js --> 
+        
         <% end %>
     </div>
 </div>
