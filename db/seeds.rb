@@ -8,23 +8,23 @@ User.destroy_all
 
 puts 'creating'
 
-50.times do
-  Country.create!(name: Faker::Nation.flag)
+10.times do
+  Country.create!(name: Faker::Nation.unique.flag)
 end
 
-a,g =  [],[];
+authors, genres =  [],[];
 3.times do
-  u = User.create! name: Faker::Name.name
+  User.create! name: Faker::Name.unique.name
   
-  a << Author.create!(name: Faker::Book.author, country: Country.find(rand(Country.first.id..Country.last.id))) #Country.find((i..l).to_a.sample)
+  authors << Author.create!(name: Faker::Book.unique.author, country: Country.find(rand(Country.first.id..Country.last.id))) #Country.find((i..l).to_a.sample)
 end
 6.times do
-  g << Genre.create!( name: Faker::Book.genre)
+  genres << Genre.create!( name: Faker::Book.unique.genre)
 end
 
-a.each do |aa|
+authors.each do |author|
   3.times do
-    Book.create! title: Faker::Book.title, author: aa, genre: g.sample
+    Book.create! title: Faker::Book.title, author: author, genre: genres.sample
   end
 end 
 

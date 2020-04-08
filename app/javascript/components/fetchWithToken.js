@@ -12,3 +12,5 @@ const fetchWithToken = (url, options) => {
 };
 
 export { fetchWithToken };
+
+// https://kitt.lewagon.com/knowledge/tutorials/fetch_in_rails

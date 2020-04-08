@@ -56,6 +56,7 @@ class BooksController < ApplicationController
     books = Book.includes(:author, :genre)
     render json: books.to_json(include:  {author: {only: :name}, genre: {only: :name}})
     # this will 'lazy' render '/views/books/books_all.html.erb' with this view using @books 
+    
   end
 
   def books_ajax
@@ -84,10 +85,8 @@ class BooksController < ApplicationController
   end
 
   def get_form_simple_form
-    logger.debug ".............................#{params}"
     @result = params[:search][:input]
     if @result.present?
-      logger.debug ".............................#{@result}"
       respond_to do |format|
         format.js
       end

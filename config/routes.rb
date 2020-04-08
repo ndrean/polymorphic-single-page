@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   resources :authors, only: [:new, :create, :edit, :update]
 
   resources :genres, only: [:create]
-  #post 'genres', to: 'genres#create'
+
+  resources :dynamics, only: [:new, :create]
+  get 'dynamics/addBook'
+
+  
   post 'APIgenres', to: 'genres#APIcreate'
   get 'genres/genresJson'
   post 'genres/createGenre'

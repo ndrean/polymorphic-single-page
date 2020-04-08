@@ -1,0 +1,44 @@
+<hr>
+<%= link_to "Back", :back %>
+<%= link_to 'Home', root_path %>
+<h4>Create an author, then create dynamically books.</h4>
+<div class="container"> 
+    <div class="row">
+    
+        <%= simple_form_for @author, url: dynamics_path do |f| %>
+            <legend>Create an author</legend>
+            <div class="row border d-flex flex-row justify-content-between align-items-center">         
+                
+                <div class="col-sm-8 col-md-8">
+                    <%= f.input_field :name, placeholder: "Author's name",
+                        class: "input-author" %>
+                        
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    <%= f.association :country, prompt: "Select a country", label: false, 
+                        input_html: { class: "form-control" } %>
+                </div>
+            </div>
+            <br>
+
+            <legend>Create associated books</legend> 
+            <div class="row pl-2 pr-3 d-flex" >
+                <div class="col">
+                    <%= f.simple_fields_for(:books)  do |b| %>
+                        <%= render 'dynamics/bookfields', f:b %>
+                    <% end %> 
+                </div> 
+            </div>
+            <div class="row pl-2 pr-3 d-flex">
+                <div class="col">
+                    <%= add_book("Add a book", f, :books, @genre) %>
+                </div> 
+            </div>
+    
+            <div class="row p-2">
+                <%= f.button :submit, "Create author & books", class:"btn btn-primary"%> 
+            </div>
+        <% end %>
+    </div>
+</div>
+

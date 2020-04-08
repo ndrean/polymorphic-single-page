@@ -1,0 +1,12 @@
+<%#= f.hidden_field :_destroy %>
+<div class="row border">
+  <div class="col-sm-8 align-items-center p-3">
+    <%= f.input_field :title,  class: "input-author", placeholder: 'Enter a title'%>
+  </div>
+
+  <%= f.input_field :_destroy, as: :hidden %> 
+
+  <div class="col-sm-2 align-items-center ">
+    <%= link_to "Remove", "#", class: "remove_fields badge badge-danger mt-4" %>
+  </div>
+</div>

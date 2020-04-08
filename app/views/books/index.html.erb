@@ -9,6 +9,10 @@
 
 <div class="container">
   <div class="row">
+    <h6><%= link_to "As a user/admin, I can create an author, then dynamically associated books", new_dynamic_path %></h6>
+  </div>
+
+  <div class="row">
     <h6><%= link_to "As a user/admin, I can create an author, then a book and it's genre", new_author_path %></h6>
   </div>
   <div class="row">
@@ -347,10 +351,10 @@
   <a href="#start">Back to start</a>
 </div>
 
-<hr>
 <div class="container" id="API-JSON">
+<hr>
   <div class="col">
-      <p> The link bellow makes a HTTP request 'url= ../books_all' to display the file  '/views/books_all', which in served by the method 'books#books_all' for the data. </p>
+      <p> The link below makes a HTTP request 'url= ../books_all' to display the file  '/views/books_all', which in served by the method 'books#books_all' for the data. </p>
       <p>% link_to 'View books in another page', books_all_path % </p>
       <p>This is a link to a new page. We pass directly the instance '@books' to the view which uses '@books'. This is different from partials, which use a local variable,
       'books: @books'.</p>

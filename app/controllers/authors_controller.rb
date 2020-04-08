@@ -48,6 +48,10 @@ class AuthorsController < ApplicationController
   def update
   end
 
+  
+
+
+
 private
   def author_params
     #params.require(:author).permit(:name,  :country_id, :genre, :author_id, :author.object_id, books_attributes:  [:id, :title, :genre_id, :_destroy])

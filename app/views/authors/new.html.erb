@@ -53,7 +53,7 @@
             </div>
 
     <%# # https://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormTagHelper.html#method-i-hidden_field_tag %>
-            <%= f.input :id, as: :hidden, value: @author.object_id  %>
+            <%#= f.input :id, as: :hidden, value: @author.object_id  %>
         </div>
 <!-- https://github.com/heartcombo/simple_form/wiki/Nested-Models> -->    
         <br>
@@ -66,7 +66,7 @@
                     <%= render 'authors/bookfields', f:b, genres: @genres %>
                 <% end %>   
 
-                <%#= button_to_add_book 'Add a book', f, :books, @genres %>
+                <%#= button_to_add_book 'Add a book', f, :books, @genres, :genre %>
             </div> 
             
         </div>

@@ -18,3 +18,8 @@ import { fetchWithToken } from "../components/fetchWithToken";
 import { csrfToken } from "@rails/ujs";
 
 import { fetchGenre } from "../components/fetchGenre";
+
+require("../components/addFields");
+require("../components/removeFields");
+
+// import { addFields } from "../components/addFields";

@@ -7,7 +7,7 @@ class Author < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   
-  accepts_nested_attributes_for :books, :genres, allow_destroy: true  
+  accepts_nested_attributes_for :books, :genres, allow_destroy: true, reject_if: :all_blank
 
 
   def self.find_author_books(search)
