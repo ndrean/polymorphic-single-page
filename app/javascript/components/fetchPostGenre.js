@@ -23,15 +23,13 @@ if (genreInput) {
         data-name=${data.name} >
         <span class="pr-2"> ${data.name} </span>
         <span>
-            <a data-method='delete' data-remote: true href="/genres/${data.id} 
+            <a data-method='delete' data-remote="true" href="/genres/${data.id}" rel="nofollow"
                 data-confirm: "You can delete this tag only if not used">
               <i class= 'fa fa-times-circle'></i> 
             </a>
         </span>
       </p> `
     );
+    $("formCreateGenre").reset();
   });
-  $("formCreateGenre").reset();
 }
-
-//  <p class='radio-label'> {data.name} </p>

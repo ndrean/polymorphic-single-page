@@ -23,19 +23,19 @@
     <h6> <a href="#"> Go to: As a user, I can create reviews associated to an author or a book, or a movie</a></h6>
   </div>
   <div class="row">
-    <h6><a href="#form-no-model"> Go to: Form with no model (no Active Record object) within the same page</a>  </h6>
+    <h6><a href="#form-no-model"> Form with no model (no Active Record object) within the same page</a>  </h6>
   </div>
   <div class="row">
-    <h6><a href="#books-all">Go to: Rendering partial within a page with AJAX</a></h6>
+    <h6><a href="#books-all">Rendering partial within a page with AJAX</a></h6>
   </div>
   <div class="row">
-    <h6><a href="#genre-fetch">Go to: Rendering partial client-side with AJAX and fetch</a></h6>
+    <h6><a href="#genre-fetch">AJAX and fetch in Rails</a></h6>
   </div>
   <div class="row">
       <h6><a href="#search"> Go to: Multi-select search Ajax rendered</a></h6>
   </div>
   <div class="row">
-    <h6><a href="#API-JSON"> Go to: JSON rendering </a></h6>
+    <h6><a href="#API-JSON">JSON rendering </a></h6>
   </div>
 </div>
 
@@ -174,8 +174,9 @@
     <ul>
       respond_to do |format| <br>format.js <br>end
     </ul>
-    so that this method calls the corresponding Javascript file <strong>books_ajax.js.erb</strong>.
-    The controller's method furnishes the data (here <strong>@books</strong> and pass them to the JS function which renders
+    so that this method calls the corresponding Javascript file <strong>books_ajax.js.erb</strong> in which we can
+    write  <strong>erb</strong>.</p>
+    <p>The controller's method furnishes the data (here <strong>@books</strong> and pass them to the JS function which renders
     (within a partial at a designed location):
     <ul>
       const divBooks = document.getElementById('books-all-ajax'); <br>
@@ -216,13 +217,20 @@
 <div class="container" id="genre-fetch">
   <hr>
   <h4>AJAX and <strong>fetch()</strong>: create & delete 'genres'</h4>
-  <p>We use a basic HTML form, without Rails helpers, so without <strong>remote: true</strong>.
-  There is no hidden input. The action link will trigger a Javascript <strong>fetch call</strong>.</p>
-  <p>We edit the input, then the action button will <strong>fetch</strong>, whether with a 
-  <strong>method: 'POST'</strong> for <strong>genre#create</strong> or a <strong>method: 'DELETE'</strong>
-  for <strong>genre#destroy</strong>.</p>
-  <p>The tags will then be created by Javascript.</p> 
-  <p>We can also directly clic to delete a 'genre' from the database as there is a 'delete' link on the tag
+  <p>We use a basic HTML form, without Rails helpers, so without <strong>remote: true</strong>. 
+  <p>The tags will then be created by Javascript. It's pur JS (not 'js.erb') so we can't use Rails helpers.</p> 
+  The action link will trigger a Javascript <strong>fetch call</strong>.</p>
+  <p>We edit the input, then the action button will <strong>fetch</strong> with a 
+  <strong>method: 'POST'</strong> for <strong>genre#create</strong>.</p>
+  
+   <p>We have 2 'delete' methods: the first one is via <strong>fetch</strong>. 
+   <p> To delete a 'genre' from the database, we select/clic on a tag and it's value will be copied in the input,
+  and it's id will be copied in a hidden input. Then we can submit the url '<strong>genres/:id</strong> to
+  <strong>fetch</strong> with <strong>method: 'DELETE'</strong></p>. We defined a custom route with:
+  <ul><strong>match</strong> 'APIdestroy/:id', to: 'genres#APIdestroy', via: :delete</ul>
+  </p>
+  
+  <p>The second delete method 'genre' from the database as there is a 'delete' link on the tag
   who calls a Rails <strong>genre#destroy/:id</strong> method. We get the id of these tags (they are only
   p's) by using <strong>tabindex = <'% genre.id %> (>= 0)</strong> to get focus on a individual tag (a 'p' tag) and find it's id. Then the Rails method calls a Javascript function <strong>dstroy.js.erb</strong>to remove this 'genre' from the view.</p> 
   <div class="row">
@@ -242,8 +250,10 @@
         <hr>
         <form id="formDeleteGenre">
           <input type="text" id="genre_to_delete" class="border">
+          <input type="text" hidden id="hiddenId">
           <input type="submit" value='Fetch Delete Genre' class="btn btn-danger">
         </form>
+        
       </div>
     </div>
     <div class="col radio-choices" id="display-genres">
