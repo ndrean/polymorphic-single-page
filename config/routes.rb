@@ -20,13 +20,14 @@ Rails.application.routes.draw do
   resources :books, only: [:index, :new, :create]
   resources :authors, only: [:new, :create, :edit, :update]
 
-  resources :genres, only: [:create]
+  resources :genres, only: [:create, :destroy]
 
   resources :dynamics, only: [:new, :create]
   
 
   
   post 'APIgenres', to: 'genres#APIcreate'
+  delete 'APIgenres', to: 'genres#APIdestroy'
   get 'genres/genresJson'
   post 'genres/createGenre'
 

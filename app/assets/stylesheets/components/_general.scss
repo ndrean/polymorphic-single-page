@@ -12,6 +12,11 @@
     padding: 10px 2px;
 }
 
+.genre-tag {
+    display: flex;
+    justify-content: space-between;
+}
+
 .radio-label {
     flex-wrap: wrap;
     /*flex: 0 0 5%; /* not grow, not shrink, each is 25% of flex-box */
@@ -20,6 +25,7 @@
     border-radius: 5px;
     margin: 5px;
     color: white;
+
 
 
 
@@ -50,9 +56,10 @@
     border-radius: 5px;
 }
 
-/* https://css-tricks.com/the-checkbox-hack/ */
-/* https://css-tricks.com/almanac/selectors/c/checked/ */
-
 .link-new-book {
     color: red;
 }
+
+
+/* https://css-tricks.com/the-checkbox-hack/ */
+/* https://css-tricks.com/almanac/selectors/c/checked/ */

@@ -17,7 +17,9 @@ import { fetchWithToken } from "../components/fetchWithToken";
 
 import { csrfToken } from "@rails/ujs";
 
-import { fetchGenre } from "../components/fetchGenre";
+import { fetchPostGenre } from "../components/fetchPostGenre";
+
+import { fetchDeleteGenre } from "../components/fetchDeleteGenre.js";
 
 require("../components/addFields");
 require("../components/removeFields");

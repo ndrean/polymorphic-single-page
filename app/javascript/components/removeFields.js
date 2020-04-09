@@ -2,7 +2,7 @@ class removeFields {
   // This executes when the function is instantiated.
   constructor() {
     this.links = document.querySelectorAll(".remove_fields");
-    console.log("remove");
+    console.log("remove it");
     this.iterateLinks();
   }
 
@@ -38,6 +38,6 @@ class removeFields {
   }
 }
 
-if (document.querySelectorAll(".remove_fields")) {
+if (document.querySelector(".remove_fields")) {
   new removeFields();
 }
