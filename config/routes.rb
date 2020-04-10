@@ -26,8 +26,8 @@ Rails.application.routes.draw do
   
   post 'APIgenres', to: 'genres#APIcreate'
   # define custom route
-  match 'APIdestroy/:id', to: 'genres#APIdestroy', via: :delete
-  
+  #match 'APIdestroy/:id', to: 'genres#APIdestroy', via: :delete
+  delete 'APIdestroy/:id', to: 'genres#APIdestroy'
 
   #post 'genres/createGenre'
   #get 'genres/genresJson'

@@ -12,12 +12,12 @@ if (deleteGenre) {
       const response = await fetchWithToken("/APIdestroy/" + id, {
         method: "DELETE",
       });
-      const msg = await response.json();
-      console.log("deleted", msg);
+      if (response.ok) {
+        $("genre_" + id).remove();
+        $("formDeleteGenre").reset();
+      }
     } catch {
-      (err) => console.log(err);
+      (err) => console.log("impossible", err);
     }
-    $("genre_" + id).remove();
-    $("formDeleteGenre").reset();
   });
 }

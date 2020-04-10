@@ -15,8 +15,6 @@ if (genreInput) {
     });
     const data = await response.json();
     console.log("data", data);
-    // const display = (d) => {
-    // const lastTag = d[d.length - 1].name;
     $("display-genres").insertAdjacentHTML(
       "beforeend",
       ` <p class="radio-label pr-1 genre-tag" tabindex =${data.id} id="genre_${data.id}"
@@ -24,7 +22,7 @@ if (genreInput) {
         <span class="pr-2"> ${data.name} </span>
         <span>
             <a data-method='delete' data-remote="true" href="/genres/${data.id}" rel="nofollow"
-                data-confirm: "You can delete this tag only if not used">
+                data-confirm="You can delete this tag only if not used">
               <i class= 'fa fa-times-circle'></i> 
             </a>
         </span>
