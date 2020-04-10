@@ -110,7 +110,9 @@
         <%= f.submit "Form_with (AJAX)", class:'btn btn-primary' %>
       <% end %>
       <br>
-      <%= simple_form_for(:search, url: 'books/get_form_simple_form', remote: true) do |f| %>   
+      <%= simple_form_for(:search, url: 'books/get_form_simple_form',
+          wrapper: :inline_form, html: { class: 'form-inline'},
+          remote: true) do |f| %>   
         <%= f.input_field :input, id:"input1", placeholder:""%>
          <!-- usage of .input_field to display aligned -->
         <%= f.button :submit, "Simple_form AJAX", class:"btn btn-primary"%>
@@ -196,16 +198,21 @@
     <strong>toggleAttribute('hidden')</strong> on the div container of the response (alternatively, we can add/remove
     <strong>classList.toggle('active')</strong> to this container div where 'active' is the CSS class <strong> {display: none;}</strong>.
     </p>
+  </div>
+  <div class="row">
     <p>
       <%= link_to 'View all books with AJAX', "books/books_ajax", remote: true, class:'btn btn-primary' %>
       <button class="btn btn-primary" id="hideBtn"> Hide / Show results </button>
     </p>
-    <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
+  </div>
+  
+  <!-- class .active defined in _alert.scss and class toggled by 'toggleDiv.js-->
+  <div class="row">
     <div id="hideMe" > <!-- class="not-active" -->
       <div id = "books-all-ajax"></div>  
     </div>
-    
   </div>
+  
   <div class="row">
     <p><a href="#start">Back to start</a></p>
   </div>
@@ -265,7 +272,7 @@
         <p class="radio-label pr-1 genre-tag" tabindex = <%=genre.id%> id = "genre_<%=genre.id%>" data-name="<%=genre.name%>"" contenteditable="true">
           <span class="pr-2"><%= genre.name %></span>
           <span><%= link_to genre_path(genre), method: :delete, remote: true, data:{confirm: "You can delete this tag only if not used"} do %>
-          <i class= 'fa fa-times-circle'></i>
+          <i class= 'fa fa-times-circle' style="color:red;"></i>
         <% end %>
         </span>
         </p>
@@ -291,11 +298,10 @@
   <div class="row">
 
     <h3>Commented books: using a scope and simply joins</h3>
-    <%= link_to 'Comment books', root_path %>
+    <p><%= link_to 'Comment books', root_path %></p>
     <%#= render 'books/reviewed_unreviewed', books: @reviewed_books %>
     
   </div>
-  <hr>
 </div>
 
 
@@ -319,19 +325,23 @@
 
 <!-- with 'multiple: true', we have a drop-down selection form -->
 
-<hr>
-<div class='container' id='search'>
-<h3>Multiple search forms AJAX rendered</h3>
 
-<h5>Reviews on books (search by title)</h5>
+<div class='container' id='search'>
+<hr>
+  <h3>Multiple search forms AJAX rendered with no model</h3>
+
+  <h5>Reviews on books (search by title)</h5>
   <div class="row">    
     <div class="col">
       <%= simple_form_for :search,
         url: 'books/reviews_by_title',
         remote: true,
         method: :get do |f| %>   
+
+        <%= f.input_field :input_title, collection: @titles, multiple: true %>
+    </div>
+    <div class="col">     
         <%= f.button :submit, "Search", class:"btn btn-primary"%>
-        <%= f.input_field :input_title, collection: @titles, multiple: true %>   
       <% end %>
     </div>
     <div class="col">
@@ -349,7 +359,9 @@
         remote: true,
         method: :get do |f| %>   
         <%= f.input_field :input_name, collection: @list_authors, multiple: true  %>
-        <%= f.button :submit, "Search", class:"btn-primary" %>
+    </div>
+    <div class="col">
+        <%= f.button :submit, "Search", class:"btn btn-primary" %>
       <% end %>
     </div>
     <div class="col">
@@ -357,17 +369,19 @@
     </div>
   </div>
   <hr>
-  <h5>Comments from the users (usage of "reviewable")</h5>
-  <div class="row">  
-    <%= simple_form_for :search,
-      url: 'books/reviews_by_user',
-      remote: true,
-      method: :get do |f| %>   
-      <%= f.input_field :user_name, collection: @users_names, multiple: true %>
-      <%= f.submit "Search", class:"btn btn-primary" %>
-    <% end %>
-  
-  <hr>
+  <h5>Comments from users (use "reviewable")</h5>
+  <div class="row">
+    <div class="col">
+      <%= simple_form_for :search,
+        url: 'books/reviews_by_user',
+        remote: true,
+        method: :get do |f| %>   
+        <%= f.input_field :user_name, collection: @users_names, multiple: true %>
+    </div>
+    <div class="col">
+        <%= f.submit "Search", class:"btn btn-primary" %>
+      <% end %>
+    </div>
     <div id="ajax_reviews_by_user">
       <% if false && @name == nil %>
         <h3>All comments by users: usage of "reviewable"</h3>
@@ -375,7 +389,9 @@
       <% end %>
     </div>
   </div>
-  <a href="#start">Back to start</a>
+  <div class="row">
+    <a href="#start">Back to start</a>
+  </div>
 </div>
 
 <div class="container" id="API-JSON">

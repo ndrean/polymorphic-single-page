@@ -8,7 +8,7 @@ User.destroy_all
 
 puts 'creating'
 
-10.times do
+5.times do
   Country.create!(name: Faker::Nation.unique.flag)
 end
 

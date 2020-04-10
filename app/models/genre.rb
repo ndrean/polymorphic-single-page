@@ -9,4 +9,8 @@ class Genre < ApplicationRecord
     
     accepts_nested_attributes_for :books, reject_if: :all_blank
 
+    # def find_reviews_by_genre
+    #     id_array = Book.all.select { |book| book.genre_id == self.id }
+
+    # end
 end
