@@ -1,11 +1,23 @@
-<ul>
-    <% reviews_title.each do |r| %>
-        <li>
-            <%= r.comment %> 
-            <% (0..5).to_a.sample.times do  %>
-                <i class="fa fa-star" ></i>
-            <% end %>
-            by <%= r.user.name %>
-        </li>
-    <% end %>
-</ul>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Book Title</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Stars</th>
+            <th scope="col">User</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% reviews_title.each_with_index do |r,i| %>
+            <tr>
+                <td ><%= titles[i] %></th>
+                <td><%= r.comment %></td>
+                <td><% (0..5).to_a.sample.times do  %>
+                        <i class="fa fa-star" ></i>
+                    <% end %></td>
+                <td><%= r.user.name %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+

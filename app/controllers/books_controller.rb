@@ -28,6 +28,12 @@ class BooksController < ApplicationController
   def reviews_by_title
     # method 'find_reviews_by_title' defined in model 'Review' with 'self'
     @reviews_title = Review.find_reviews_by_title(params[:search])
+    #binding.pry
+    @titles = []
+    @reviews_title[0..-1].each do |review|
+      @titles << Book.find_by_id(review.reviewable_id).title
+    end
+    #binding.pry
     respond_to do |format|
       format.js
     end
@@ -36,9 +42,9 @@ class BooksController < ApplicationController
   def reviews_by_user
     # method 'find_reviews_by_title' defined in model 'Review' with 'self'
     @user_reviews = Review.find_reviews_by_user(params[:search])
-    if @user_reviews.class == Array
-      @user_reviews = Kaminari.paginate_array(@user_reviews).page(params[:page]).per(5)
-    end
+    # if @user_reviews.class == Array
+    #   @user_reviews = Kaminari.paginate_array(@user_reviews).page(params[:page]).per(5)
+    # end
     respond_to do |format|
       format.js
     end
@@ -47,6 +53,7 @@ class BooksController < ApplicationController
   def books_by_author
     # method 'find_author_books' defined in model 'Author' with 'self'
     @author_books = Author.find_author_books(params[:search])
+    #binding.pry
     respond_to do |format|
       format.js
     end

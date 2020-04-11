@@ -24,7 +24,7 @@ end
 
 authors.each do |author|
   3.times do
-    Book.create! title: Faker::Book.title, author: author, genre: genres.sample
+    Book.create! title: Faker::Book.unique.title, author: author, genre: genres.sample
   end
 end 
 
@@ -40,7 +40,7 @@ an = Author.count
 
 arr = []
 50.times do
-  arr << Faker::Music.album
+  arr << Faker::Movie.quote + Faker::Lorem.paragraph(sentence_count: 1)
 end
 
 (u1..u1+un-1).each do |iu|

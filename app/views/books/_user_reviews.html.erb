@@ -1,18 +1,28 @@
   
-  <% user_reviews.each do |review|%>
-    <%= review.user.name %> wrote ":
-    <ul>
-        <% if review.reviewable_type == 'Book' %>  
-            <li>
-                <%= review.comment %>" about the book "<%= review.reviewable.title %>" 
-                by <%= review.reviewable.author.name %> <%= review.reviewable.author.country.name %>
-            </li>
-        <% else %>
-            <li>
-                <%= review.comment %>" on the writter 
-                <%= review.reviewable.name %> <%= review.reviewable.country.name %>
-            </li><
+  <table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">User</th>
+            <th scope="col">Comment</th>
+            <th scope="col">On</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% user_reviews.each do |review|%>
+        <tr>
+            <td><%= review.user.name %></td>
+            <td><%= review.comment %></td>
+            <td>    <%= review.reviewable_type %></td>
+            <% if review.reviewable_type == 'Book' %>
+                <td><%= review.reviewable.title %></td>
+                <td><%= review.reviewable.author.name %></td>
+            <% else %>
+            <td></td>
+            <td><%= review.reviewable.name %></td>
+            <% end %>
+        </tr>
         <% end %>
-    </ul>   
-<% end %>
-
+    </tbody>
+</table>
