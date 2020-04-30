@@ -72,7 +72,7 @@
     </div>
     <div class="col">
     <%= simple_form_for( :search, url: get_form_path, wrapper: :inline_form, html: { class: "form-inline"}) do |f| %>   
-      <%= f.input_field :input %>
+      <%= f.input_field :q %>
       <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
     <% end %>
     </div>
@@ -84,11 +84,36 @@
   
   <hr>
   <h5>Submitting a form via AJAX</h5>
-  <p>By default, the default method is <strong>POST</strong>. We use the Rails helpers  <strong>form_with</strong> and <strong>Simple_Form</strong>.
-  The first 'form_with' uses an url to call the action <strong>url: controller/method</strong>, and 'Simple Form'
-  uses a symbol <strong>:search</strong> and the method is specified by <strong>url: "controller/method_name"</strong>.
-  The helper 'form_with' is <strong>remote: true</strong> by default, and we have to specify it for 'Simple Form'. 
-  Since we use AJAX, rendering will done by the browser. The method will save the params in an instance variable
+  <p>By default, a form triggers a <strong>POST</strong> http request so we do not need to specify <em>method: :post</em>. We use here two Rails helpers  <strong>form_with</strong> and <strong>Simple_Form</strong>.
+  These Rails form helper take in charge CSRF protection by inserting a hidden field with a token.</p>
+  <p>Since we do not use a model here (the data is not persisted in a database), we need to specify the action attached to a form by <em>url: controller/method_name</em>. This URL is declared in  the <em>routes.rb</em>
+   file with <em>post "controller/method"</em>. We also specify <em>remote: true</em> (implicit as by default for <em>form_with</em> and to be declared for <em>simple_form</em>).</p>
+   <p>When we use a model, the input data will be persisted in the database and the model will infer the URL and scope  (<em>name="my_model[q]"</em>).</p>
+   These helpers will produce the following html code:</p>
+  <ul>
+    <li><'form action="controller/method" data-remote="true" method="post" accept-charset="UTF-8"> </li>
+    <li></li>
+  </ul>
+
+  <p> <em>Simple_form</em> works with models. Since we don't use a model,   it needs a symbol (eg <em><'% simple_form :search url:books/show %'></em>. The scope will prefixe the input fields names
+  and we will have <em>name="search[q]</em> if we use <em><'% f.input :q%></em>.</p>
+  <p><em>form_with</em> doesn't need a model. If we want to specify a model, then we would write <em><'% form_with model: @my_book %></em></p>
+  <p> The data that is captured in the input will be stored in the variable declared by the attribute <em>name</em>. If we use <em>name="q"</em> (with <em><'% f.text_field :q %></em> or <'% f.input :q%'>), then the <me>params</me>
+  hash will contain <em>{"q"=> "the_input"}</em> or <em>{"search"=> {"q"=> "the_input"}}</em>. The controller will be able to read as use it as <em>params[:q]</em>
+  or <em>params[:search][:q]</em>.</p>
+  <p> We want to render with AJAX: this means that the action triggered after <em>submit</em> will not render HTML.
+  <ol>
+    <li>The  will call the method .</li>
+    <li>The <em>submit</em> button will make the form sends an http <em>POST</em> to the backend. The data is stored in the body (the attribute <em>name</em> holds the data).
+    <li>The method of the controller is listed in the routes by the <em>url</em> ((by default the one that controls the view).</li>
+    <li> The method will read the <em>params</em> and save the data in an instance variable.</li>
+    <li>The method will not render HTML via a 'normal server response' within an  <em>html.erb</em> view but will be passed to the browser with a call to a  Javascript <em>js.erb</em> file.
+    <li> <strong>Passing data from Rails to the browser 1)</strong>.  We use the <em>js.erb</em> format.  The file will firstly be parsed by <em>Ruby</em> which changes
+    the data such as <em><'% j @result %> </em> to it's actual value (we use the javascript escape <em>j</em> symbol). Then the Javascript will render.
+     </li>
+    <li></li>
+  </ol> 
+   T
   and te data will be passed to the JS file  <strong>method.js.erb</strong>. A Javascript function will render
   an HTML string into the HTML attribute of a DOM element. We also have a CSRFToken iva a hidden input. </p>
   <div class="row">
@@ -106,22 +131,24 @@
     
     <div class="col">
       <%= form_with url:'books/get_form_1' do |f| %>
-        <%= f.text_field :input %>
+        <%= f.text_field :q %>
         <%= f.submit "Form_with (AJAX)", class:'btn btn-primary' %>
       <% end %>
       <br>
       <%= simple_form_for(:search, url: 'books/get_form_simple_form',
           wrapper: :inline_form, html: { class: 'form-inline'},
           remote: true) do |f| %>   
-        <%= f.input_field :input, id:"input1", placeholder:""%>
+        <%= f.input_field :q, id:"input1", placeholder:""%>
          <!-- usage of .input_field to display aligned -->
         <%= f.button :submit, "Simple_form AJAX", class:"btn btn-primary"%>
       <% end %>
+      
     </div>
     <div class="col">
       <p>Result: <span id="form-1"> </span></p>
       <br>
       <p>Result: <span id="form-2" > </span></p>
+      
     </div>
   </div>
 
@@ -135,7 +162,7 @@
       
     </div>
   </div>
-  We also used the Rails form helper <strong>Simple_Form</strong> so again it is CSRF protected.    
+     
     <!-- Note: for a custom button, we do: -->
     <!--  <%#= f.button :submit, 'Search!' do %> -->
     <!--            my custom button text           -->
@@ -146,7 +173,7 @@
     if not suported by the browser.</p>
     <div class="row">
       <div class="col">
-    <!-- do not use 'form'. Used the Javascript function 'copyClipboard.js' -->
+    <!-- do not used 'form'.but the Javascript function 'copyClipboard.js' -->
         <input id="to-copy" type="text" style= "border: 1px solid grey"
           placeholder = "type n click to copy/paste">
         <button id="copy-btn" class="btn btn-primary">Copy to clipboard</button>

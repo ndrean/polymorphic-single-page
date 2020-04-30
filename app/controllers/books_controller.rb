@@ -76,14 +76,14 @@ class BooksController < ApplicationController
   def get_form
     #binding.pry
     if params[:search].present?
-      cookies[:form] = params[:search][:input]
+      cookies[:form] = params[:search][:q]
       #logger.debug "........................1 : cookies[:form] = #{cookies[:form]}"
       redirect_to root_path
     end
   end
   
   def get_form_1
-    @result = params[:input] # result transmitted to the view
+    @result = params[:q] # result transmitted to the view
     if @result.present?
         respond_to do |format|
           format.js
@@ -92,7 +92,7 @@ class BooksController < ApplicationController
   end
 
   def get_form_simple_form
-    @result = params[:search][:input]
+    @result = params[:search][:q]
     if @result.present?
       respond_to do |format|
         format.js

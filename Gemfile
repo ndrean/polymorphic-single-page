@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.5'
+ruby '2.7.1'
 #gem 'jquery'
 gem 'bootsnap', require: false
 gem 'jbuilder', '~> 2.0'
@@ -23,7 +23,7 @@ gem 'uglifier'
 gem 'webpacker'
 #gem 'faker'
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
-gem 'rack-mini-profiler'
+
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -38,4 +38,5 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'bullet'
   gem 'rubocop'
+  gem 'rack-mini-profiler'
 end

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   post 'get_form', to: 'books#get_form'
   post 'books/get_form_1'
   post 'books/get_form_simple_form'
+  post 'books/get_form_dataset'
+  
   post 'get_form_ajax2', to: 'books#get_form_ajax2', as: 'get_form_ajax2'
 
   

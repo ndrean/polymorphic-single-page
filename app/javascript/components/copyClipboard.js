@@ -1,19 +1,20 @@
-inputToCopy = document.getElementById("to-copy");
+const inputToCopy = document.getElementById("to-copy");
 
 const clip = () => {
-  copyButton = document.getElementById("copy-btn");
+  const copyButton = document.getElementById("copy-btn");
 
   /* version with Clipboard API */
   if (navigator.clipboard) {
-    copyButton.addEventListener("click", () => {
-      const val = document.getElementById("to-copy").value;
-      navigator.clipboard.writeText(val).then(() => {
-        navigator.clipboard.readText().then(text => {
-          const target = document.getElementById("clipboard");
-          target.textContent = text;
-        });
-        inputToCopy.value = "";
-      });
+    copyButton.addEventListener("click", async () => {
+      const someText = document.getElementById("to-copy").value;
+
+      await navigator.clipboard.writeText(someText);
+
+      const target = document.getElementById("clipboard");
+
+      target.textContent = await navigator.clipboard.readText();
+
+      inputToCopy.value = "";
     });
   } else {
     /* version avec document.execCommand  si clipboard API not supported*/
@@ -22,7 +23,7 @@ const clip = () => {
       document.execCommand("copy");
       const target = document.getElementById("ajax-form");
       //target.document.execCommand('paste')
-      navigator.clipboard.readText().then(text => {
+      navigator.clipboard.readText().then((text) => {
         target.textContent = text;
         inputToCopy.value = ""; // reset the input
       });
