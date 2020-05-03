@@ -12,10 +12,11 @@ Rails.application.routes.draw do
   get 'books/display_json'
   get 'books/books_ajax'
 
-  post 'get_form', to: 'books#get_form'
+  post 'get_form_cookie', to: 'books#get_form_cookie' # gives us get_for_cookie_path
+  #post 'books/get_form_cookie'
   post 'books/get_form_1'
   post 'books/get_form_simple_form'
-  post 'books/get_form_dataset'
+  
   
   post 'get_form_ajax2', to: 'books#get_form_ajax2', as: 'get_form_ajax2'
 

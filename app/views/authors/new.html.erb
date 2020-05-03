@@ -63,6 +63,7 @@
                  
                 <%= f.simple_fields_for(:books, :genre)  do |b| %>   
                     <%#= binding.pry %>
+                    ICI
                     <%= render 'authors/bookfields', f:b, genres: @genres %>
                 <% end %>   
             </div> 

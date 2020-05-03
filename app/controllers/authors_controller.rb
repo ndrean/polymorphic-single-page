@@ -1,11 +1,8 @@
 class AuthorsController < ApplicationController
-  # def local_binding
-  #   binding
-  # end
 
   def new
     @author = Author.new
-    @author.books.build
+    @author.books.build  
     @author.books.build
     
     # since the 'simple_field_for' iterates on all books, we can create
@@ -17,7 +14,7 @@ class AuthorsController < ApplicationController
     @genre = Genre.new
 
     #
-    @author.books.build.reviews.build
+    #@author.books.build.reviews.build
   end
 
   def create

@@ -1,21 +1,17 @@
 class removeFields {
   // This executes when the function is instantiated.
   constructor() {
-    this.links = document.querySelectorAll(".remove_fields");
-    console.log("remove it");
+    // this.links = document.querySelectorAll(".remove_fields");
+    // console.log("remove it");
     this.iterateLinks();
   }
 
   iterateLinks() {
     // If there are no links on the page, stop the function from executing.
-    if (this.links.length === 0) return;
-    // Loop over each link on the page.
-    this.links.forEach((link) => {
-      link.addEventListener("click", (e) => {
-        console.log(document.querySelectorAll(".remove_fields"));
-        console.log(e.target);
-        this.handleClick(link, e);
-      });
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.className === "remove_fields") {
+        this.handleClick(e.target, e);
+      }
     });
   }
 
@@ -37,7 +33,6 @@ class removeFields {
     }
   }
 }
-
-if (document.querySelector(".remove_fields")) {
-  new removeFields();
-}
+// if (document.querySelector(".remove_fields")) {
+new removeFields();
+// }

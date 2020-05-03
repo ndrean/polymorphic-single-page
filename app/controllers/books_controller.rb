@@ -73,12 +73,15 @@ class BooksController < ApplicationController
     end
   end
 
-  def get_form
+  def get_form_cookie
     #binding.pry
     if params[:search].present?
       cookies[:form] = params[:search][:q]
-      #logger.debug "........................1 : cookies[:form] = #{cookies[:form]}"
-      redirect_to root_path
+      logger.debug "........................1 : cookies[:form] = #{cookies[:form]}"
+      respond_to do |format|
+        format.js
+      end
+      #redirect_to root_path
     end
   end
   

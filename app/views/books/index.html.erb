@@ -54,79 +54,135 @@
   </p>
 
   <hr>
-  <p>We use Simple_Form here. To simulate saving in a database, we store the params in a cookie. A cookie is declared by naming it: <strong>cookies[:form] = params[...]</strong>.
-  The method then calls a 'redirect_to' this same page. Since there is an HTML bellow  <strong>Result: <'%= render 'books/form' %></strong> 
-  waiting to display a partial <strong>books/_form.html.erb</strong> that contains <strong><'%= cookies[:form] %></strong>. 
+  <p>We use the form helper <em>Simple_form</em> here. On submit, we will store the body of the request in a cookie.
+  A cookie is declared by naming it: <code>cookies[:form] = params[...]</code>.
+  The <em>submit</em> will trigger a method referenced with it's <em>URL</em>, declared in the file <em>routes.rb</em>.
+  This method reads the body of the request captured in the <em>params</em> hash <code>{"search" => "my_input"}</code>. 
+  It will then <code>redirect_to</code> this same page.</p>
+  <p> Since there is an HTML bellow  <code>Result: <'%= render 'books/form' %></code>  waiting to display a partial
+  <strong>books/_form.html.erb</strong> that contains <code><'%= cookies[:form] %></code>. 
   Once submitted, the page is refreshed and the input appears bellow. 
   We can keep this persistant until the browser is closed, or destroy the cookie after serving the partial, so that
   a page refresh will reset the partial (this is the case here).
   </p>
   <div class="row">
     <div class="col">
-      <ul>
-        <ol><'input type="hidden" name="authenticity_token" </ol>
-        <ol> value="xxxxxx=="></ol>
-        <ol><'%= simple_form_for(:search, url: get_form_path,...) do |f| %></ol>
-        <ol> <'%= f.text_field :search %></ol>
-      </ul>
+    <em># /views/books/www.html.erb</em>
+      <pre>
+      &lt%= simple_form_for(:search, url: get_form_cookie_path,...) do |f| %&gt
+        &lt%= f.text_field :search %&gt
+        &lt%= f.submit "Display with Cookie"%&gt
+      &lt% end %&gt
+      </pre>
+      <em># books_controller.rb</em>
+      <pre>
+      def get_form_cookie
+        if params[:search].present?
+          cookies[:form] = params[:search][:q]
+          redirect_to roo_path
+        end
+      end
+      </pre>
     </div>
     <div class="col">
-    <%= simple_form_for( :search, url: get_form_path, wrapper: :inline_form, html: { class: "form-inline"}) do |f| %>   
+    <%= simple_form_for( :search, url: get_form_cookie_path, wrapper: :inline_form,
+        html: { class: "form-inline"}, remote: true) do |f| %>   
       <%= f.input_field :q %>
       <%= f.submit "Display with Cookie", class:"btn btn-primary"%>
     <% end %>
     </div>
     <div class="col">
-      Result:  <%= render 'books/form', result: cookies[:form] %>
+    <p id="cookie">Result:</p>
+    <p> Result:  <%= render 'books/form', result: cookies[:form] %>
       <% cookies.delete :form %>
+    </p>
+      
     </div>
   </div>
   
   <hr>
   <h5>Submitting a form via AJAX</h5>
-  <p>By default, a form triggers a <strong>POST</strong> http request so we do not need to specify <em>method: :post</em>. We use here two Rails helpers  <strong>form_with</strong> and <strong>Simple_Form</strong>.
-  These Rails form helper take in charge CSRF protection by inserting a hidden field with a token.</p>
-  <p>Since we do not use a model here (the data is not persisted in a database), we need to specify the action attached to a form by <em>url: controller/method_name</em>. This URL is declared in  the <em>routes.rb</em>
-   file with <em>post "controller/method"</em>. We also specify <em>remote: true</em> (implicit as by default for <em>form_with</em> and to be declared for <em>simple_form</em>).</p>
-   <p>When we use a model, the input data will be persisted in the database and the model will infer the URL and scope  (<em>name="my_model[q]"</em>).</p>
-   These helpers will produce the following html code:</p>
+  <p>The <em>submit</em> event of a form has the following requirements:
   <ul>
-    <li><'form action="controller/method" data-remote="true" method="post" accept-charset="UTF-8"> </li>
-    <li></li>
+    <li>the <em>submit</em> must be included in a <em>form</em></li>
+    <li>there is at least 1 input or textarea inside of the form</li>
+    <li>has a button of either <code> input type="submit" </code>  or a <code> button type="submit" </code></li>
   </ul>
+  so the code looks like this:
+  
+  <pre>
+  &lt form id="address-form" &gt
+    &lt input type="text" name="q" &gt
+    &lt input type="submit" value="Save" &gt
+    &lt-- equivalently --&gt
+    &lt button type="submit" &gt Save &lt/button&gt
+  &lt/form &gt
+  </pre>
+  
+  </p>
+  <p>By default, a form triggers a <strong>POST</strong> http request so we do not need to specify <code>method: :post</code>.
+   We use here two Rails helpers  <strong>form_with</strong> and <strong>Simple_Form</strong>.
+  These Rails form helper take in charge CSRF protection by inserting a hidden field with a token.</p>
+  <p>In this paragraph, we do not use a model here, meaning the data is not persisted in a database.
+  We need to specify the action attached to a form by <code>url: controller/method_name</code>.
+   This URL is declared in  the <em>routes.rb</em> file with <code>post "controller/method"</code>.</p>
+  <p> By default, <em>form_with</em> submits the form with AJAX. For <em>Simple_Form</em>, we have to <em>remote: true</em>.</p>
+   <p>Note: when we use a model, the input data will be persisted in the database and the model will infer the URL and scope  (<em>name="my_model[q]"</em>).</p>
+   These helpers will produce the following html code:</p>
+  <pre>
+  &lt form action="controller/method" data-remote="true" method="post" accept-charset="UTF-8" &gt
+  </pre>
+  
+   
+   
 
-  <p> <em>Simple_form</em> works with models. Since we don't use a model,   it needs a symbol (eg <em><'% simple_form :search url:books/show %'></em>. The scope will prefixe the input fields names
+  <p> Since <em>Simple_form</em> works with models, and since we don't use a model, it needs a symbol (eg <em><'% simple_form :search url:books/show %'></em>.
+   The scope will prefixe the input fields names
   and we will have <em>name="search[q]</em> if we use <em><'% f.input :q%></em>.</p>
   <p><em>form_with</em> doesn't need a model. If we want to specify a model, then we would write <em><'% form_with model: @my_book %></em></p>
   <p> The data that is captured in the input will be stored in the variable declared by the attribute <em>name</em>. If we use <em>name="q"</em> (with <em><'% f.text_field :q %></em> or <'% f.input :q%'>), then the <me>params</me>
   hash will contain <em>{"q"=> "the_input"}</em> or <em>{"search"=> {"q"=> "the_input"}}</em>. The controller will be able to read as use it as <em>params[:q]</em>
   or <em>params[:search][:q]</em>.</p>
-  <p> We want to render with AJAX: this means that the action triggered after <em>submit</em> will not render HTML.
+  <p> We want to render with AJAX: this means that the action triggered after <em>submit</em> will not render HTML but 
+  Server-generated JavaScript Responses (SJR).</p>
   <ol>
-    <li>The  will call the method .</li>
-    <li>The <em>submit</em> button will make the form sends an http <em>POST</em> to the backend. The data is stored in the body (the attribute <em>name</em> holds the data).
+    <li>The <em>submit</em> button will make the form sends an http <em>POST</em> to the backend.
+    The attribute <em>name="my_input"</em> of the input field will reference the data (scoped <em>{"my_input" => "input_data"} </em>).
     <li>The method of the controller is listed in the routes by the <em>url</em> ((by default the one that controls the view).</li>
-    <li> The method will read the <em>params</em> and save the data in an instance variable.</li>
-    <li>The method will not render HTML via a 'normal server response' within an  <em>html.erb</em> view but will be passed to the browser with a call to a  Javascript <em>js.erb</em> file.
+    <li> The method will be able to read the body with the  <em>params</em> hash. 
+    We can make it save the data in an instance variable.</li>
+    <li>The method will not render HTML via a 'normal server response' within an  <em>html.erb</em> view.
+    Server generates a JavaScript response that includes the updated HTML template for the model.
+     but will be passed to the browser with a call to a  Javascript <em>js.erb</em> file.
     <li> <strong>Passing data from Rails to the browser 1)</strong>.  We use the <em>js.erb</em> format.  The file will firstly be parsed by <em>Ruby</em> which changes
     the data such as <em><'% j @result %> </em> to it's actual value (we use the javascript escape <em>j</em> symbol). Then the Javascript will render.
      </li>
     <li></li>
   </ol> 
    T
-  and te data will be passed to the JS file  <strong>method.js.erb</strong>. A Javascript function will render
-  an HTML string into the HTML attribute of a DOM element. We also have a CSRFToken iva a hidden input. </p>
+  By convention, if the controller method's name is <em>get_form</em>, then Rails will call a JS file named <em> get_form.js.erb</em> 
+  We ask the client Javascript function will render an HTML string into the HTML attribute of a DOM element. We also have a CSRFToken iva a hidden input. </p>
   <div class="row">
     <div class="col">
-    <ul>
-     <ol><strong>file.html.erb</strong></ol>
-      <ol><'%= form_with url:'books/get_form_3' do |f| %></ol>
-      <ol><'%= f.text_field :search %></ol>
-      <ol><strong>controller</strong></ol>
-      <ol>@result = params[:input]</ol>
-      <ol><strong>method.js.erb</strong></ol>
-      <ol>....textContent = "<'%= @result %>"</ol>
-    </ul>
+    <em>#/views/books/xxx.html.erb</em>
+      <pre>
+        &lt%= form_with url:'books/get_form' do |f| %&gt
+          &lt%= f.text_field :q %&gt
+          &lt%= f.submit 'Form_with(AJAX)' %&gt
+        &lt% end %&gt
+      </pre>
+    <em>#books_controller.rb</em> method <code> def get_form </code>
+      <pre>
+        @result = params[:q]
+        respond_to do |format|
+          format.js
+        end
+      </pre>
+      
+    # Server generated Javascript response: <em>#get_form.js.erb</em>
+      <pre>
+        document.querySelector('#result').textContent = &lt%= @result %&gt
+      </pre>
     </div>
     
     <div class="col">

@@ -15,7 +15,7 @@ class GenresController < ApplicationController
 
   def APIcreate
     logger.debug ".................................................FETCH CREATE"
-    @genre = Genre.new(genre_params)
+    @genre = Genre.new(genres_params)
     @genres = Genre.all
     if @genre.save
       render json: @genre.to_json, status: :ok
@@ -52,7 +52,7 @@ class GenresController < ApplicationController
   # end
 
 private
-  def genre_params
+  def genres_params
     params.require(:genre).permit(:name)
   end
 end
